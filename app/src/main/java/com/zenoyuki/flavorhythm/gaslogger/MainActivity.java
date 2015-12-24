@@ -1,9 +1,5 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,28 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.TextView;
-
-import com.mobsandgeeks.saripaar.QuickRule;
-import com.mobsandgeeks.saripaar.Rule;
-import com.mobsandgeeks.saripaar.ValidationError;
-import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.DecimalMin;
-import com.mobsandgeeks.saripaar.annotation.Min;
-import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.mobsandgeeks.saripaar.annotation.Order;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 import data.DatabaseHandler;
 import model.FuelLog;
@@ -42,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mpgText;
 
     private DatabaseHandler db;
+	CustomDialogFragment customDialogFragment;
 
 	private int minMileage;
 
@@ -115,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void dialogBuilder() {
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.commit();
 
         Fragment previousFragment = getSupportFragmentManager().findFragmentByTag("dialog");
         if(previousFragment != null) {
@@ -124,12 +105,27 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentTransaction.addToBackStack(null);
 
-        //need to pass minMileage in here. Make changes to class accordingly
-        CustomDialogFragment customDialogFragment = CustomDialogFragment.newInstance();
-        customDialogFragment.setCancelable(true);
+		fragmentTransaction.commit();
 
-        customDialogFragment.show(getSupportFragmentManager(), "dialog");
+		if(false) {
+			//need to pass minMileage in here. Make changes to class accordingly
+			customDialogFragment = CustomDialogFragment.newInstance();
+			customDialogFragment.show(getSupportFragmentManager(), "dialog");
+		} else {
+			fragmentTransaction = getSupportFragmentManager().beginTransaction();
+			customDialogFragment = CustomDialogFragment.newInstance();
+			fragmentTransaction.add(customDialogFragment, "dialog");
+			fragmentTransaction.commit();
+		}
     }
+
+	public static void alertSubmitBtnClick() {
+
+	}
+
+	public static void alertDismissBtnClick() {
+
+	}
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

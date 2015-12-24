@@ -14,4 +14,5 @@
     <string name="gas_error"><i>Decimal numbers</i> only</string>
     <string name="alrt_dismiss">Dismiss</string>
     <string name="alrt_submit">Submit</string>
+    <string name="alrt_title">New Entry</string>
 </resources>
