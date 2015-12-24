@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/RL_row"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:padding="10dp">
+    <RelativeLayout android:id="@+id/RL_row_odom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView android:id="@+id/TV_row_odom_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/row_odom_label"
+            android:textColor="@color/text_color"
+            android:textStyle="bold"/>
+        <TextView android:id="@+id/TV_row_odom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/num_placeholder"
+            android:layout_toRightOf="@+id/TV_row_odom_label" android:layout_toEndOf="@+id/TV_row_odom_label"
+            android:layout_marginLeft="5dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout android:id="@+id/RL_row_gas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RL_row_odom"
+        android:layout_marginTop="5dp">
+        <TextView android:id="@+id/TV_row_gas_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/row_gas_label"
+            android:textColor="@color/text_color"
+            android:textStyle="bold"/>
+        <TextView android:id="@+id/TV_row_gas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/num_placeholder"
+            android:layout_toRightOf="@+id/TV_row_gas_label" android:layout_toEndOf="@+id/TV_row_gas_label"
+            android:layout_marginLeft="5dp"/>
+    </RelativeLayout>
+
+    <TextView android:id="@+id/TV_row_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/num_placeholder"
+        android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
+        android:layout_below="@+id/RL_row_gas"/>
+
+    <ImageButton android:id="@+id/IB_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_menu_edit"
+        android:layout_toLeftOf="@+id/IB_delete" android:layout_toStartOf="@+id/IB_delete"/>
+    <ImageButton android:id="@+id/IB_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_delete"
+        android:layout_alignParentRight="true" android:layout_alignParentEnd="true"/>
+</RelativeLayout>

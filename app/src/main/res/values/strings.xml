@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Gas Logger</string>
+    <string name="history">History</string>
+    <string name="num_placeholder">99.9</string>
+    <string name="mpg">mpg</string>
+    <string name="row_odom_label">Odometer:</string>
+    <string name="row_gas_label">Gas in Gal:</string>
+    <string name="odom_hint">Odometer</string>
+    <string name="gas_hint">Gas in Gal</string>
+
+    <string name="toast_item_saved">Successfully saved!</string>
+
+    <string name="odom_error"><i>Whole numbers</i> only</string>
+    <string name="gas_error"><i>Decimal numbers</i> only</string>
+</resources>
