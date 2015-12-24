@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -39,10 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mpgText;
 
-    private EditText odomInput, gasInput;
-
-    private AlertDialog alertDialog;
     private DatabaseHandler db;
+
+	private int minMileage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<FuelLog> fuelLogArrayList = db.getAllEntries();
 
         if(fuelLogArrayList.size() > 1) {
-            int mileage = fuelLogArrayList.get(0).getCurrentOdomVal() - fuelLogArrayList.get(fuelLogArrayList.size() - 1).getCurrentOdomVal();
+        	minMileage = fuelLogArrayList.get(fuelLogArrayList.size() - 1).getCurrentOdomVal();
+            int mileage = fuelLogArrayList.get(0).getCurrentOdomVal() - minMileage;
 
             float gasUse = 0;
             for(FuelLog fuelLog : fuelLogArrayList) {
@@ -112,43 +114,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void dialogBuilder() {
-        LayoutInflater layoutInflater = getLayoutInflater();
-        View customLayout = layoutInflater.inflate(R.layout.new_entry_dialog, null);
+		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.commit();
 
-        odomInput = (EditText) customLayout.findViewById(R.id.ET_dialog_odom);
-        gasInput = (EditText) customLayout.findViewById(R.id.ET_dialog_gas);
+        Fragment previousFragment = getSupportFragmentManager().findFragmentByTag("dialog");
+        if(previousFragment != null) {
+            fragmentTransaction.remove(previousFragment);
+        }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setView(customLayout);
-        builder.setTitle("New Entry");
+        fragmentTransaction.addToBackStack(null);
 
-        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                FuelLog fuelLog = new FuelLog();
+        //need to pass minMileage in here. Make changes to class accordingly
+        CustomDialogFragment customDialogFragment = CustomDialogFragment.newInstance();
+        customDialogFragment.setCancelable(true);
 
-                int odomVal = Integer.parseInt(odomInput.getText().toString());
-                float gasVal = Float.parseFloat(gasInput.getText().toString());
-
-                fuelLog.setCurrentOdomVal(odomVal);
-                fuelLog.setFuelTopupAmount(gasVal);
-
-                DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-                db.addEntry(fuelLog);
-                db.close();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        alertDialog = builder.create();
-        alertDialog.show();
-
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        customDialogFragment.show(getSupportFragmentManager(), "dialog");
     }
 
     @Override
@@ -157,79 +137,4 @@ public class MainActivity extends AppCompatActivity {
 
         mpgText.setText(updateAverage());
     }
-
-    //
-//    @Override
-//    public void onValidationSucceeded() {
-//        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-//        odomInput.setError(null);
-//        gasInput.setError(null);
-//        Log.d("validation", "success");
-//    }
-//
-//    @Override
-//    public void onValidationFailed(List<ValidationError> errors) {
-//        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-//
-//        for(ValidationError error : errors) {
-//            switch(error.getView().getId()) {
-//                case R.id.ET_dialog_odom:
-//                    odomInput.setError("Whole numbers only");
-//                    break;
-//                case R.id.ET_dialog_gas:
-//                    gasInput.setError("Whole/Decimal numbers only");
-//                    break;
-//                default: break;
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public void onFocusChange(View v, boolean hasFocus) {
-//        if(hasFocus) {
-//            ((EditText)v).addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//                    validator.put(odomInput, minOdomValRule);
-//                    validator.validate();
-//                }
-//
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//                @Override
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-//            });
-//        } else {
-//            validator.validate();
-//        }
-//    }
-
-    //    private void findOdomMinInput() {
-//        minOdomValRule = new QuickRule<EditText>(2) {
-//            @Override
-//            public boolean isValid(EditText editText) {
-//                switch(editText.getId()) {
-//                    case R.id.ET_dialog_odom:
-//                        db = new DatabaseHandler(getApplicationContext());
-//                        ArrayList<FuelLog> fuelLogArrayList = db.getAllEntries();
-//                        db.close();
-//                        try {
-//                            FuelLog fuelLog = fuelLogArrayList.get(fuelLogArrayList.size() - 1);
-//                            return Integer.parseInt(editText.getText().toString()) >= fuelLog.getCurrentOdomVal();
-//                        } catch(NumberFormatException|NullPointerException e) {
-//                            odomInput.setError("Cannot be empty");
-//                        }
-//                    default:
-//                        return false;
-//                }
-//            }
-//
-//            @Override
-//            public String getMessage(Context context) {
-//                return "Needs to be greater than previous value";
-//            }
-//        };
-//
-//        validator.put(odomInput, minOdomValRule);
-//    }
 }

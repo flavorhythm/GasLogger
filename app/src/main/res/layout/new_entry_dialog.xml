@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <EditText android:id="@+id/ET_dialog_odom"
+    android:orientation="vertical" android:gravity="right"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <EditText android:id="@+id/alrt_edt_odom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/odom_hint"
         android:inputType="number"/>
-    <EditText android:id="@+id/ET_dialog_gas"
+    <EditText android:id="@+id/alrt_edt_gas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/gas_hint"
         android:inputType="numberDecimal"
         android:imeOptions="actionDone"/>
-    <LinearLayout
+    <LinearLayout android:id="@+id/alrt_LL_btnGroup"
+        style="?android:buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        >
-
+        android:orientation="horizontal">
+        <Button android:id="@+id/alrt_btn_dismiss"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/alrt_dismiss"/>
+        <Button android:id="@+id/alrt_btn_submit"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/alrt_submit"/>
     </LinearLayout>
 </LinearLayout>

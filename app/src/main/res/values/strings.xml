@@ -12,4 +12,6 @@
 
     <string name="odom_error"><i>Whole numbers</i> only</string>
     <string name="gas_error"><i>Decimal numbers</i> only</string>
+    <string name="alrt_dismiss">Dismiss</string>
+    <string name="alrt_submit">Submit</string>
 </resources>
