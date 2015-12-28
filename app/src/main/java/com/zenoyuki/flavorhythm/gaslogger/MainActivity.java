@@ -20,12 +20,9 @@ import model.FuelLog;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mpgText;
-
-    private DatabaseHandler db;
-	CustomDialogFragment customDialogFragment;
-
-	private int minMileage;
+    //CLASS VARIABLES
+    private TextView mpgText; //Textview to display average MPG
+	private int minMileage; //Value of last input. Used to validate next input. Passed to CustomDialogFragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,36 +31,41 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mpgText = (TextView)findViewById(R.id.TV_display_mpg_value);
-        mpgText.setText(updateAverage());
+        mpgText = (TextView)findViewById(R.id.TV_display_mpg_value); //Ties mpgText variable to appropriate view
+        mpgText.setText(updateAverage()); //Updates mpgText for the first time with the average milages from DB
 
-        FloatingActionButton addBtn = (FloatingActionButton)findViewById(R.id.FAB_add);
+        FloatingActionButton addBtn = (FloatingActionButton)findViewById(R.id.FAB_add); //Ties addBtn to appropriate view
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialogBuilder();
             }
-        });
+        }); //Sets action to addBtn when pressed
     }
 
+    //Method to update MPG value from DB
     private String updateAverage() {
-        db = new DatabaseHandler(getApplicationContext());
+        //Sets up DB variable and puts all entries into arraylist fuelLogArrayList
+        DatabaseHandler db = new DatabaseHandler(getApplicationContext());
         db.getReadableDatabase();
         ArrayList<FuelLog> fuelLogArrayList = db.getAllEntries();
+        db.close();
 
+        //If there are entries in the DB, finds the average MPG
         if(fuelLogArrayList.size() > 1) {
-        	minMileage = fuelLogArrayList.get(fuelLogArrayList.size() - 1).getCurrentOdomVal();
-            int mileage = fuelLogArrayList.get(0).getCurrentOdomVal() - minMileage;
+        	minMileage = fuelLogArrayList.get(fuelLogArrayList.size() - 1).getCurrentOdomVal(); //finds the most recent entry
+            int mileage = fuelLogArrayList.get(0).getCurrentOdomVal() - minMileage; //Finds total miles traveled
 
+            //Accumulates all gas topups from DB
             float gasUse = 0;
             for(FuelLog fuelLog : fuelLogArrayList) {
                 gasUse += fuelLog.getFuelTopupAmount();
             }
 
+            //Divides total miles traveled by total gas usage
             float mpg = mileage / gasUse;
-            DecimalFormat df = new DecimalFormat("###.0");
+            DecimalFormat df = new DecimalFormat("###.0"); //Formats MPG value
 
-            db.close();
             return df.format(mpg);
         } else {
             return "0";
@@ -95,7 +97,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Builds a dialog using a fragment
     private void dialogBuilder() {
+        //Cleans up any previously open fragments with the tag "dialog"
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         Fragment previousFragment = getSupportFragmentManager().findFragmentByTag("dialog");
@@ -104,29 +108,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         fragmentTransaction.addToBackStack(null);
-
 		fragmentTransaction.commit();
 
-		if(false) {
-			//need to pass minMileage in here. Make changes to class accordingly
-			customDialogFragment = CustomDialogFragment.newInstance();
-			customDialogFragment.show(getSupportFragmentManager(), "dialog");
-		} else {
-			fragmentTransaction = getSupportFragmentManager().beginTransaction();
-			customDialogFragment = CustomDialogFragment.newInstance();
-			fragmentTransaction.add(customDialogFragment, "dialog");
-			fragmentTransaction.commit();
-		}
+        //Creates the dialog and passes minMileage to CustomDialogFragment
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        CustomDialogFragment customDialogFragment = CustomDialogFragment.newInstance(minMileage);
+        fragmentTransaction.add(customDialogFragment, "dialog");
+        fragmentTransaction.commit();
     }
 
-	public static void alertSubmitBtnClick() {
-
-	}
-
-	public static void alertDismissBtnClick() {
-
-	}
-
+    //Updates MPG value every time focus changes
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);

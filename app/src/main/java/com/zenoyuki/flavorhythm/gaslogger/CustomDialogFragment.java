@@ -16,7 +16,7 @@ import android.widget.Toast;
  * Created by zyuki on 12/23/2015.
  */
 public class CustomDialogFragment extends DialogFragment implements View.OnClickListener {
-    public static CustomDialogFragment newInstance() {
+    public static CustomDialogFragment newInstance(int minMileage) {
         CustomDialogFragment fragment = new CustomDialogFragment();
         return fragment;
     }
@@ -53,14 +53,22 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
     public void onClick(View v) {
         switch(v.getId()) {
 			case R.id.alrt_btn_submit:
-				((MainActivity)getActivity()).alertSubmitBtnClick();
+				alertSubmitBtnClick();
 				break;
 			case R.id.alrt_btn_dismiss:
-				((MainActivity)getActivity()).alertDismissBtnClick();
+				alertDismissBtnClick();
 				break;
 			default:
 				Toast.makeText(getContext(), "Something went wrong with the buttons", Toast.LENGTH_SHORT).show();
 				break;
 		}
+    }
+
+    public void alertSubmitBtnClick() {
+
+    }
+
+    public void alertDismissBtnClick() {
+
     }
 }
