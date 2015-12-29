@@ -14,10 +14,25 @@ import android.widget.Toast;
 
 /**
  * Created by zyuki on 12/23/2015.
+ * Reason why you cannot do the following:
+ * public class CustomDialogFragment extends DialogFragment implements View.OnClickListener {
+ *     private static final String MIN_MILEAGE_KEY = "min_mileage";
+ *     private String myVar;
+ * public static CustomDialogFragment newInstance(int minMileage, String myVar) {
+ *     this.myVar = myVar;
+ * This is because the instantiation (I believe it's an instance to save memory, instead of creating an object via a constructor)
+ * needs to be declared static (can be declared just public. Maybe this would create a crash? must test) and static methods cannot pull from
+ * "this."
  */
 public class CustomDialogFragment extends DialogFragment implements View.OnClickListener {
-    public static CustomDialogFragment newInstance(int minMileage) {
+    private static final String MIN_MILEAGE_KEY = "min_mileage";
+
+    public static CustomDialogFragment newInstance(int minMileage, String myVar) {
         CustomDialogFragment fragment = new CustomDialogFragment();
+        Bundle args = new Bundle();
+
+        args.putInt(MIN_MILEAGE_KEY, minMileage);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -65,10 +80,10 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
     }
 
     public void alertSubmitBtnClick() {
-
+        int minMileage = getArguments().getInt(MIN_MILEAGE_KEY);
     }
 
     public void alertDismissBtnClick() {
-
+        getDialog().dismiss();
     }
 }
