@@ -1,21 +1,15 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
-import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.andreabaccega.formedittextvalidator.Validator;
 
 /**
  * Created by zyuki on 12/23/2015.
@@ -44,12 +38,6 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
         return fragment;
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,14 +63,15 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 			case R.id.alrt_btn_submit:
                 boolean odomEmpty = TextUtils.isEmpty(odomVal.getText());
                 boolean gasEmpty = TextUtils.isEmpty(gasVal.getText());
-                boolean groupedEmpty = odomEmpty && gasEmpty;
 
-                if(groupedEmpty) {
-                    if(odomEmpty) {
-                        odomVal.setError(getResources().getString(R.string.odom_error));
-                    }
+                if(odomEmpty || gasEmpty) {
                     if(gasEmpty) {
+                        gasVal.requestFocus();
                         gasVal.setError(getResources().getString(R.string.gas_error));
+                    }
+                    if(odomEmpty) {
+                        odomVal.requestFocus();
+                        odomVal.setError(getResources().getString(R.string.odom_error));
                     }
                 } else {
                     Toast.makeText(getContext(), "It will save now", Toast.LENGTH_SHORT).show();
