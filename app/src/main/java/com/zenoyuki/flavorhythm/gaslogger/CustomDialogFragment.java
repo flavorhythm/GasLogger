@@ -4,12 +4,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import data.DatabaseHandler;
+import model.FuelLog;
 
 /**
  * Created by zyuki on 12/23/2015.
@@ -64,19 +68,42 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
                 boolean odomEmpty = TextUtils.isEmpty(odomVal.getText());
                 boolean gasEmpty = TextUtils.isEmpty(gasVal.getText());
 
+                //Tests for empty fields. If either fields are empty, further validation goes on here in these nested IF blocks
                 if(odomEmpty || gasEmpty) {
+                    //Tests for empty gas usage field first
                     if(gasEmpty) {
                         gasVal.requestFocus();
-                        gasVal.setError(getResources().getString(R.string.gas_error));
+                        gasVal.setError(getResources().getString(R.string.gas_blank_error));
                     }
                     if(odomEmpty) {
                         odomVal.requestFocus();
-                        odomVal.setError(getResources().getString(R.string.odom_error));
+                        odomVal.setError(getResources().getString(R.string.odom_blank_error));
                     }
-                } else {
-                    Toast.makeText(getContext(), "It will save now", Toast.LENGTH_SHORT).show();
+
+                    break;
                 }
-				break;
+
+                int odomNewVal = Integer.parseInt(odomVal.getText().toString());
+                int minOdom = getArguments().getInt(MIN_MILEAGE_KEY);
+
+                if(minOdom >= odomNewVal) {
+                    odomVal.requestFocus();
+
+                    String minOdomError = getResources().getString(R.string.odom_low_value_error) + " " + String.valueOf(minOdom);
+                    odomVal.setError(minOdomError);
+
+                    break;
+                } else {
+                    DatabaseHandler db = new DatabaseHandler(getContext());
+                    FuelLog fuelLog = new FuelLog();
+                    db.getWritableDatabase();
+
+                    fuelLog.setCurrentOdomVal(Integer.parseInt(odomVal.getText().toString()));
+                    fuelLog.setFuelTopupAmount(Float.parseFloat(gasVal.getText().toString()));
+
+                    db.addEntry(fuelLog);
+                    db.close();
+                }
 			case R.id.alrt_btn_dismiss:
                 getDialog().dismiss();
 				break;

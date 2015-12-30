@@ -45,6 +45,7 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         listView = (ListView)findViewById(R.id.LV_history);
+//        listView.setEmptyView(LayoutInflater.from(HistoryActivity.this).inflate(R.layout.empty_list, null));
 
         refreshData();
     }

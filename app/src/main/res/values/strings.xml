@@ -10,9 +10,11 @@
 
     <string name="toast_item_saved">Successfully saved!</string>
 
-    <string name="odom_error"><i>Whole numbers</i> only</string>
-    <string name="gas_error"><i>Decimal numbers</i> only</string>
+    <string name="odom_blank_error"><i>Whole numbers</i> only</string>
+    <string name="odom_low_value_error">Needs a value greater than</string>
+    <string name="gas_blank_error"><i>Decimal numbers</i> only</string>
     <string name="alrt_dismiss">Dismiss</string>
     <string name="alrt_submit">Submit</string>
     <string name="alrt_title">New Entry</string>
+    <string name="empty_list_text">No items to display</string>
 </resources>

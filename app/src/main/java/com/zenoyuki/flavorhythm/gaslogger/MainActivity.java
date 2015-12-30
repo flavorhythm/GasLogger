@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,9 +52,11 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<FuelLog> fuelLogArrayList = db.getAllEntries();
         db.close();
 
+        //Finds the most recent entry if entries exist in the DB. If not, sets minMileage to ZERO
+        minMileage = fuelLogArrayList.size() > 0 ? fuelLogArrayList.get(fuelLogArrayList.size() - 1).getCurrentOdomVal() : 0;
+
         //If there are entries in the DB, finds the average MPG
         if(fuelLogArrayList.size() > 1) {
-        	minMileage = fuelLogArrayList.get(fuelLogArrayList.size() - 1).getCurrentOdomVal(); //finds the most recent entry
             int mileage = fuelLogArrayList.get(0).getCurrentOdomVal() - minMileage; //Finds total miles traveled
 
             //Accumulates all gas topups from DB
@@ -123,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
+        Log.v("Updated", String.valueOf(minMileage));
         mpgText.setText(updateAverage());
     }
 }
