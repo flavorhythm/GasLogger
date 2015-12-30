@@ -5,12 +5,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.andreabaccega.formedittextvalidator.Validator;
 
 /**
  * Created by zyuki on 12/23/2015.
@@ -24,7 +29,7 @@ import android.widget.Toast;
  * needs to be declared static (can be declared just public. Maybe this would create a crash? must test) and static methods cannot pull from
  * "this."
  */
-public class CustomDialogFragment extends DialogFragment implements View.OnClickListener, View.OnFocusChangeListener {
+public class CustomDialogFragment extends DialogFragment implements View.OnClickListener {
     private static final String MIN_MILEAGE_KEY = "min_mileage";
 
     private EditText odomVal, gasVal;
@@ -68,8 +73,20 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
     public void onClick(View v) {
         switch(v.getId()) {
 			case R.id.alrt_btn_submit:
-				odomVal.setOnFocusChangeListener(this);
-                gasVal.setOnFocusChangeListener(this);
+                boolean odomEmpty = TextUtils.isEmpty(odomVal.getText());
+                boolean gasEmpty = TextUtils.isEmpty(gasVal.getText());
+                boolean groupedEmpty = odomEmpty && gasEmpty;
+
+                if(groupedEmpty) {
+                    if(odomEmpty) {
+                        odomVal.setError(getResources().getString(R.string.odom_error));
+                    }
+                    if(gasEmpty) {
+                        gasVal.setError(getResources().getString(R.string.gas_error));
+                    }
+                } else {
+                    Toast.makeText(getContext(), "It will save now", Toast.LENGTH_SHORT).show();
+                }
 				break;
 			case R.id.alrt_btn_dismiss:
                 getDialog().dismiss();
@@ -78,20 +95,5 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 				Toast.makeText(getContext(), "Something went wrong with the buttons", Toast.LENGTH_SHORT).show();
 				break;
 		}
-    }
-
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        //int minMileage = getArguments().getInt(MIN_MILEAGE_KEY);
-
-        switch(v.getId()) {
-            case R.id.alrt_edt_odom:
-
-                break;
-            case R.id.alrt_edt_gas:
-                break;
-            default:
-                break;
-        }
     }
 }
