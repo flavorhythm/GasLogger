@@ -24,10 +24,13 @@ import android.widget.Toast;
  * needs to be declared static (can be declared just public. Maybe this would create a crash? must test) and static methods cannot pull from
  * "this."
  */
-public class CustomDialogFragment extends DialogFragment implements View.OnClickListener {
+public class CustomDialogFragment extends DialogFragment implements View.OnClickListener, View.OnFocusChangeListener {
     private static final String MIN_MILEAGE_KEY = "min_mileage";
 
-    public static CustomDialogFragment newInstance(int minMileage, String myVar) {
+    private EditText odomVal, gasVal;
+    private Button submit, dismiss;
+
+    public static CustomDialogFragment newInstance(int minMileage) {
         CustomDialogFragment fragment = new CustomDialogFragment();
         Bundle args = new Bundle();
 
@@ -49,9 +52,6 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 
         getDialog().setTitle(R.string.alrt_title);
 
-        EditText odomVal, gasVal;
-        Button submit,dismiss;
-
         odomVal = (EditText)customLayout.findViewById(R.id.alrt_edt_odom);
         gasVal = (EditText)customLayout.findViewById(R.id.alrt_edt_gas);
 
@@ -68,10 +68,11 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
     public void onClick(View v) {
         switch(v.getId()) {
 			case R.id.alrt_btn_submit:
-				alertSubmitBtnClick();
+				odomVal.setOnFocusChangeListener(this);
+                gasVal.setOnFocusChangeListener(this);
 				break;
 			case R.id.alrt_btn_dismiss:
-				alertDismissBtnClick();
+                getDialog().dismiss();
 				break;
 			default:
 				Toast.makeText(getContext(), "Something went wrong with the buttons", Toast.LENGTH_SHORT).show();
@@ -79,11 +80,18 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 		}
     }
 
-    public void alertSubmitBtnClick() {
-        int minMileage = getArguments().getInt(MIN_MILEAGE_KEY);
-    }
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        //int minMileage = getArguments().getInt(MIN_MILEAGE_KEY);
 
-    public void alertDismissBtnClick() {
-        getDialog().dismiss();
+        switch(v.getId()) {
+            case R.id.alrt_edt_odom:
+
+                break;
+            case R.id.alrt_edt_gas:
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         //Creates the dialog and passes minMileage to CustomDialogFragment
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         CustomDialogFragment customDialogFragment = CustomDialogFragment.newInstance(minMileage);
+
         fragmentTransaction.add(customDialogFragment, "dialog");
         fragmentTransaction.commit();
     }
