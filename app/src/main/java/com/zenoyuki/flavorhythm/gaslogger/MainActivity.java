@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.MI_history:
                 startActivity(new Intent(MainActivity.this, HistoryActivity.class));
+                finish();
                 break;
             default:
                 break;
@@ -126,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        Log.v("Updated", String.valueOf(minMileage));
         mpgText.setText(updateAverage());
     }
 }

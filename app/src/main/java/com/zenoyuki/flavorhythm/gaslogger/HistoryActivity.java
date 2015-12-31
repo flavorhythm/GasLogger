@@ -73,15 +73,15 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     public class DataAdapter extends ArrayAdapter<FuelLog> {
-        Activity activityMain;
+        Activity activity;
         int layoutResource;
         ArrayList<FuelLog> fuelLogArrayList = new ArrayList<>();
 
-        public DataAdapter(Activity activity, int resource, ArrayList<FuelLog> fuelLogList) {
-            super(activity, resource, fuelLogList);
+        public DataAdapter(Activity activity, int layoutResource, ArrayList<FuelLog> fuelLogList) {
+            super(activity, layoutResource, fuelLogList);
 
-            this.activityMain = activity;
-            this.layoutResource = resource;
+            this.activity = activity;
+            this.layoutResource = layoutResource;
             this.fuelLogArrayList = fuelLogList;
 
             notifyDataSetChanged();
@@ -102,7 +102,7 @@ public class HistoryActivity extends AppCompatActivity {
 
             if(row == null || row.getTag() == null) {
                 //Inflates row layout into the row object
-                LayoutInflater layoutInflater = LayoutInflater.from(activityMain);
+                LayoutInflater layoutInflater = LayoutInflater.from(activity);
                 row = layoutInflater.inflate(layoutResource, null);
                 viewHolder = new ViewHolder();
 

@@ -12,7 +12,7 @@
     <ListView android:id="@+id/LV_history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:dividerHeight="0dp" />
+        android:dividerHeight="0dp"/>
     <TextView android:id="@+id/empty_txt_emptyListText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

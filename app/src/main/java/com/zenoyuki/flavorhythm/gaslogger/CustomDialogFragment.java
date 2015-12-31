@@ -106,6 +106,8 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
                 }
 			case R.id.alrt_btn_dismiss:
                 getDialog().dismiss();
+
+                getActivity().getSupportFragmentManager().popBackStack();
 				break;
 			default:
 				Toast.makeText(getContext(), "Something went wrong with the buttons", Toast.LENGTH_SHORT).show();
