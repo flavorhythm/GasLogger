@@ -45,13 +45,14 @@
         android:text="@string/num_placeholder"
         android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
         android:layout_below="@+id/RL_row_gas"/>
-
-    <ImageButton android:id="@+id/IB_edit"
+    <!--
+    <ImageButton android:id="@+id/IB_row_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:drawable/ic_menu_edit"
-        android:layout_toLeftOf="@+id/IB_delete" android:layout_toStartOf="@+id/IB_delete"/>
-    <ImageButton android:id="@+id/IB_delete"
+        android:layout_toLeftOf="@+id/IB_row_delete" android:layout_toStartOf="@+id/IB_row_delete"/>
+    -->
+    <ImageButton android:id="@+id/IB_row_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:drawable/ic_delete"

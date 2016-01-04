@@ -119,7 +119,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void editEntry(int delID, FuelLog entry) {
+    public void editEntry(FuelLog entry) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -131,7 +131,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 Constants.TABLE_NAME,
                 values,
                 Constants.KEY_ID + " = ?",
-                new String[]{String.valueOf(delID)}
+                new String[]{String.valueOf(entry.getItemID())}
         );
 
         db.close();

@@ -59,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
         if(fuelLogArrayList.size() > 1) {
             int mileage = fuelLogArrayList.get(0).getCurrentOdomVal() - minMileage; //Finds total miles traveled
 
-            //Accumulates all gas topups from DB
+            //Accumulates all gas topups from DB except for the very first (last item in fuelLogArrayList) entry
             float gasUse = 0;
             for(FuelLog fuelLog : fuelLogArrayList) {
                 gasUse += fuelLog.getFuelTopupAmount();
-            }
+            } gasUse -= fuelLogArrayList.get(fuelLogArrayList.size() - 1).getFuelTopupAmount();
 
             //Divides total miles traveled by total gas usage
             float mpg = mileage / gasUse;
@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.MI_history:
                 startActivity(new Intent(MainActivity.this, HistoryActivity.class));
-                finish();
                 break;
             default:
                 break;
