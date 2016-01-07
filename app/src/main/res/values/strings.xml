@@ -5,8 +5,8 @@
     <string name="mpg">mpg</string>
     <string name="row_odom_label">Odometer:</string>
     <string name="row_gas_label">Gas in Gal:</string>
-    <string name="odom_hint">Odometer</string>
-    <string name="gas_hint">Gas in Gal</string>
+    <string name="odom_hint">Odometer *</string>
+    <string name="gas_hint">Gas in Gal *</string>
 
     <string name="toast_item_saved">Successfully saved!</string>
 
@@ -17,4 +17,5 @@
     <string name="alrt_submit">Submit</string>
     <string name="alrt_title">New Entry</string>
     <string name="empty_list_text">No items to display</string>
+    <string name="required_asterisk">* indicates required field</string>
 </resources>
