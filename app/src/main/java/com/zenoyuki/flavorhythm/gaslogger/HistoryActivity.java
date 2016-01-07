@@ -1,43 +1,16 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import data.DataAdapter;
 import data.DatabaseHandler;
 import model.FuelLog;
 
 public class HistoryActivity extends AppCompatActivity {
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-
-        refreshData();
-    }
-
-    private DatabaseHandler db;
     private ArrayList<FuelLog> fuelLogArrayList = new ArrayList<>();
-    private DataAdapter dataAdapter;
     private ListView listView;
 
     @Override
@@ -51,9 +24,16 @@ public class HistoryActivity extends AppCompatActivity {
         refreshData();
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        refreshData();
+    }
+
     private void refreshData() {
         fuelLogArrayList.clear();
-        db = new DatabaseHandler(getApplicationContext());
+        DatabaseHandler db = new DatabaseHandler(getApplicationContext());
 
         ArrayList<FuelLog> logsFromDB = db.getAllEntries();
         for(int i = 0; i < logsFromDB.size(); i++) {
@@ -68,7 +48,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         db.close();
 
-        dataAdapter = new DataAdapter(HistoryActivity.this, R.layout.history_row, fuelLogArrayList);
+        DataAdapter dataAdapter = new DataAdapter(HistoryActivity.this, R.layout.history_row, fuelLogArrayList);
         listView.setAdapter(dataAdapter);
         dataAdapter.notifyDataSetChanged();
     }

@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:gravity="end"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout android:id="@+id/alrt_LL_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:padding="10dp"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+    <TextView android:id="@+id/alrt_txt_alrtTitle"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/alrt_title"
+        android:layout_marginBottom="10dp"/>
     <EditText android:id="@+id/alrt_edt_odom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/odom_hint"
+        android:background="@android:drawable/edit_text"
         android:inputType="number"/>
     <EditText android:id="@+id/alrt_edt_gas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/gas_hint"
+        android:background="@android:drawable/edit_text"
         android:inputType="numberDecimal"
         android:imeOptions="actionDone"/>
     <LinearLayout android:id="@+id/alrt_LL_btnGroup"
         style="?android:buttonBarStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="end"
         android:orientation="horizontal">
         <Button android:id="@+id/alrt_btn_dismiss"
             style="?android:buttonBarButtonStyle"

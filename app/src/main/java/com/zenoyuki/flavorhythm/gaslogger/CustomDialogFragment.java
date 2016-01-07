@@ -1,6 +1,8 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,7 +34,6 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
     private static final String MIN_MILEAGE_KEY = "min_mileage";
 
     private EditText odomVal, gasVal;
-    private Button submit, dismiss;
 
     public static CustomDialogFragment newInstance(int minMileage) {
         CustomDialogFragment fragment = new CustomDialogFragment();
@@ -47,16 +49,21 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View customLayout = inflater.inflate(R.layout.new_entry_dialog, container, false);
 
-        getDialog().setTitle(R.string.alrt_title);
+        //Creates a dialog with the minimum width of the screen (minus padding)
+        int width = getResources().getDisplayMetrics().widthPixels - 350;
+        customLayout.setMinimumWidth(width);
 
         odomVal = (EditText)customLayout.findViewById(R.id.alrt_edt_odom);
         gasVal = (EditText)customLayout.findViewById(R.id.alrt_edt_gas);
 
-        submit = (Button)customLayout.findViewById(R.id.alrt_btn_submit);
-        dismiss = (Button)customLayout.findViewById(R.id.alrt_btn_dismiss);
+        Button submit = (Button)customLayout.findViewById(R.id.alrt_btn_submit);
+        Button dismiss = (Button)customLayout.findViewById(R.id.alrt_btn_dismiss);
 
         submit.setOnClickListener(this);
         dismiss.setOnClickListener(this);
+
+        //Removes title space from dialog
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         return customLayout;
     }

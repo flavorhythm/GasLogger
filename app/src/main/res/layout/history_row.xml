@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="@string/num_placeholder"
             android:layout_toRightOf="@+id/TV_row_odom_label" android:layout_toEndOf="@+id/TV_row_odom_label"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginStart="5dp"/>
     </RelativeLayout>
 
     <RelativeLayout android:id="@+id/RL_row_gas"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="@string/num_placeholder"
             android:layout_toRightOf="@+id/TV_row_gas_label" android:layout_toEndOf="@+id/TV_row_gas_label"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginStart="5dp"/>
     </RelativeLayout>
 
     <TextView android:id="@+id/TV_row_timestamp"
