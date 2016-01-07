@@ -34,22 +34,22 @@ public class HistoryActivity extends AppCompatActivity {
     private void refreshData() {
         fuelLogArrayList.clear();
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+        DataAdapter dataAdapter = new DataAdapter(HistoryActivity.this, R.layout.history_row, fuelLogArrayList);
+        listView.setAdapter(dataAdapter);
 
         ArrayList<FuelLog> logsFromDB = db.getAllEntries();
         for(int i = 0; i < logsFromDB.size(); i++) {
             FuelLog entry = new FuelLog();
+
             entry.setCurrentOdomVal(logsFromDB.get(i).getCurrentOdomVal());
             entry.setFuelTopupAmount(logsFromDB.get(i).getFuelTopupAmount());
             entry.setRecordDate(logsFromDB.get(i).getRecordDate());
             entry.setItemID(logsFromDB.get(i).getItemID());
 
             fuelLogArrayList.add(entry);
+            dataAdapter.notifyDataSetChanged();
         }
 
         db.close();
-
-        DataAdapter dataAdapter = new DataAdapter(HistoryActivity.this, R.layout.history_row, fuelLogArrayList);
-        listView.setAdapter(dataAdapter);
-        dataAdapter.notifyDataSetChanged();
     }
 }

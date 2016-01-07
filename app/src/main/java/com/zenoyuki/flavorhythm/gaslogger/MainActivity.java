@@ -102,9 +102,10 @@ public class MainActivity extends AppCompatActivity {
             gasUse -= fuelLogArrayList.get(fuelLogArrayList.size() - 1).getFuelTopupAmount();
 
             //Divides total miles traveled by total gas usage
-            float mpg = mileage / gasUse;
-            DecimalFormat df = new DecimalFormat("###.0"); //Formats MPG value
+            double mpg = mileage / gasUse;
+            mpg = mpg < 1000.0 ? mpg : 999.9;
 
+            DecimalFormat df = new DecimalFormat("###.0"); //Formats MPG value
             return df.format(mpg);
         } else {
             return "0";

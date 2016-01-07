@@ -6,18 +6,15 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="minmileage" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="testing" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19e561ed-44b2-47c1-b517-e4e737a9185f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/data/Constants.java" afterPath="$PROJECT_DIR$/app/src/main/java/data/Constants.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/CustomDialogFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/CustomDialogFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/HistoryActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/HistoryActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/new_entry_dialog.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/new_entry_dialog.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="GasLogger.iws" />
@@ -51,11 +48,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.07132018">
-              <caret line="72" column="13" selection-start-line="72" selection-start-column="13" selection-end-line="72" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="103" column="61" selection-start-line="103" selection-start-column="61" selection-end-line="103" selection-end-column="61" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -77,7 +74,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/HistoryActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+              <caret line="39" column="59" selection-start-line="39" selection-start-column="59" selection-end-line="39" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -98,22 +95,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CustomDialogFragment.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CustomDialogFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/CustomDialogFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="129" column="0" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.9028832">
+              <caret line="91" column="77" selection-start-line="91" selection-start-column="77" selection-end-line="91" selection-end-column="77" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2523#2567#0" expanded="true" />
-                <element signature="e#2689#2732#0" expanded="true" />
-                <element signature="e#3398#3399#0" expanded="true" />
-                <element signature="e#3464#3465#0" expanded="true" />
-                <element signature="e#3842#3843#0" expanded="true" />
-                <element signature="e#3907#3908#0" expanded="true" />
-                <element signature="e#4737#4783#0" expanded="true" />
-                <element signature="e#4996#5042#0" expanded="true" />
-                <element signature="e#5509#5564#0" expanded="true" />
+                <element signature="e#2585#2629#0" expanded="true" />
+                <element signature="e#2751#2794#0" expanded="true" />
+                <element signature="e#3460#3461#0" expanded="true" />
+                <element signature="e#3526#3527#0" expanded="true" />
+                <element signature="e#3904#3905#0" expanded="true" />
+                <element signature="e#3969#3970#0" expanded="true" />
+                <element signature="e#4799#4845#0" expanded="true" />
+                <element signature="e#5058#5104#0" expanded="true" />
+                <element signature="e#5571#5626#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -137,12 +134,13 @@
       <file leaf-file-name="new_entry_dialog.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/new_entry_dialog.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.965517">
-              <caret line="23" column="40" selection-start-line="23" selection-start-column="40" selection-end-line="23" selection-end-column="40" />
+            <state vertical-scroll-proportion="-5.862069">
+              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
               <folding>
-                <element signature="e#1942#1969#0" expanded="true" />
-                <element signature="e#2488#2510#0" expanded="true" />
-                <element signature="e#2735#2756#0" expanded="true" />
+                <element signature="e#1622#1640#0" expanded="true" />
+                <element signature="e#2012#2039#0" expanded="true" />
+                <element signature="e#2558#2580#0" expanded="true" />
+                <element signature="e#2805#2826#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1758,12 +1756,12 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/history_row.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/new_entry_dialog.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/HistoryActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/data/Constants.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/CustomDialogFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/HistoryActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/CustomDialogFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/new_entry_dialog.xml" />
       </list>
     </option>
   </component>
@@ -2216,15 +2214,15 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2523#2567#0" expanded="true" />
-            <element signature="e#2689#2732#0" expanded="true" />
-            <element signature="e#3398#3399#0" expanded="true" />
-            <element signature="e#3464#3465#0" expanded="true" />
-            <element signature="e#3842#3843#0" expanded="true" />
-            <element signature="e#3907#3908#0" expanded="true" />
-            <element signature="e#4737#4783#0" expanded="true" />
-            <element signature="e#4996#5042#0" expanded="true" />
-            <element signature="e#5509#5564#0" expanded="true" />
+            <element signature="e#2585#2629#0" expanded="true" />
+            <element signature="e#2751#2794#0" expanded="true" />
+            <element signature="e#3460#3461#0" expanded="true" />
+            <element signature="e#3526#3527#0" expanded="true" />
+            <element signature="e#3904#3905#0" expanded="true" />
+            <element signature="e#3969#3970#0" expanded="true" />
+            <element signature="e#4799#4845#0" expanded="true" />
+            <element signature="e#5058#5104#0" expanded="true" />
+            <element signature="e#5571#5626#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2290,15 +2288,15 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2523#2567#0" expanded="true" />
-            <element signature="e#2689#2732#0" expanded="true" />
-            <element signature="e#3398#3399#0" expanded="true" />
-            <element signature="e#3464#3465#0" expanded="true" />
-            <element signature="e#3842#3843#0" expanded="true" />
-            <element signature="e#3907#3908#0" expanded="true" />
-            <element signature="e#4737#4783#0" expanded="true" />
-            <element signature="e#4996#5042#0" expanded="true" />
-            <element signature="e#5509#5564#0" expanded="true" />
+            <element signature="e#2585#2629#0" expanded="true" />
+            <element signature="e#2751#2794#0" expanded="true" />
+            <element signature="e#3460#3461#0" expanded="true" />
+            <element signature="e#3526#3527#0" expanded="true" />
+            <element signature="e#3904#3905#0" expanded="true" />
+            <element signature="e#3969#3970#0" expanded="true" />
+            <element signature="e#4799#4845#0" expanded="true" />
+            <element signature="e#5058#5104#0" expanded="true" />
+            <element signature="e#5571#5626#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2356,15 +2354,15 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2523#2567#0" expanded="true" />
-            <element signature="e#2689#2732#0" expanded="true" />
-            <element signature="e#3398#3399#0" expanded="true" />
-            <element signature="e#3464#3465#0" expanded="true" />
-            <element signature="e#3842#3843#0" expanded="true" />
-            <element signature="e#3907#3908#0" expanded="true" />
-            <element signature="e#4737#4783#0" expanded="true" />
-            <element signature="e#4996#5042#0" expanded="true" />
-            <element signature="e#5509#5564#0" expanded="true" />
+            <element signature="e#2585#2629#0" expanded="true" />
+            <element signature="e#2751#2794#0" expanded="true" />
+            <element signature="e#3460#3461#0" expanded="true" />
+            <element signature="e#3526#3527#0" expanded="true" />
+            <element signature="e#3904#3905#0" expanded="true" />
+            <element signature="e#3969#3970#0" expanded="true" />
+            <element signature="e#4799#4845#0" expanded="true" />
+            <element signature="e#5058#5104#0" expanded="true" />
+            <element signature="e#5571#5626#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2403,15 +2401,15 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2523#2567#0" expanded="true" />
-            <element signature="e#2689#2732#0" expanded="true" />
-            <element signature="e#3398#3399#0" expanded="true" />
-            <element signature="e#3464#3465#0" expanded="true" />
-            <element signature="e#3842#3843#0" expanded="true" />
-            <element signature="e#3907#3908#0" expanded="true" />
-            <element signature="e#4737#4783#0" expanded="true" />
-            <element signature="e#4996#5042#0" expanded="true" />
-            <element signature="e#5509#5564#0" expanded="true" />
+            <element signature="e#2585#2629#0" expanded="true" />
+            <element signature="e#2751#2794#0" expanded="true" />
+            <element signature="e#3460#3461#0" expanded="true" />
+            <element signature="e#3526#3527#0" expanded="true" />
+            <element signature="e#3904#3905#0" expanded="true" />
+            <element signature="e#3969#3970#0" expanded="true" />
+            <element signature="e#4799#4845#0" expanded="true" />
+            <element signature="e#5058#5104#0" expanded="true" />
+            <element signature="e#5571#5626#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2443,15 +2441,15 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2523#2567#0" expanded="true" />
-            <element signature="e#2689#2732#0" expanded="true" />
-            <element signature="e#3398#3399#0" expanded="true" />
-            <element signature="e#3464#3465#0" expanded="true" />
-            <element signature="e#3842#3843#0" expanded="true" />
-            <element signature="e#3907#3908#0" expanded="true" />
-            <element signature="e#4737#4783#0" expanded="true" />
-            <element signature="e#4996#5042#0" expanded="true" />
-            <element signature="e#5509#5564#0" expanded="true" />
+            <element signature="e#2585#2629#0" expanded="true" />
+            <element signature="e#2751#2794#0" expanded="true" />
+            <element signature="e#3460#3461#0" expanded="true" />
+            <element signature="e#3526#3527#0" expanded="true" />
+            <element signature="e#3904#3905#0" expanded="true" />
+            <element signature="e#3969#3970#0" expanded="true" />
+            <element signature="e#4799#4845#0" expanded="true" />
+            <element signature="e#5058#5104#0" expanded="true" />
+            <element signature="e#5571#5626#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2483,15 +2481,15 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2523#2567#0" expanded="true" />
-            <element signature="e#2689#2732#0" expanded="true" />
-            <element signature="e#3398#3399#0" expanded="true" />
-            <element signature="e#3464#3465#0" expanded="true" />
-            <element signature="e#3842#3843#0" expanded="true" />
-            <element signature="e#3907#3908#0" expanded="true" />
-            <element signature="e#4737#4783#0" expanded="true" />
-            <element signature="e#4996#5042#0" expanded="true" />
-            <element signature="e#5509#5564#0" expanded="true" />
+            <element signature="e#2585#2629#0" expanded="true" />
+            <element signature="e#2751#2794#0" expanded="true" />
+            <element signature="e#3460#3461#0" expanded="true" />
+            <element signature="e#3526#3527#0" expanded="true" />
+            <element signature="e#3904#3905#0" expanded="true" />
+            <element signature="e#3969#3970#0" expanded="true" />
+            <element signature="e#4799#4845#0" expanded="true" />
+            <element signature="e#5058#5104#0" expanded="true" />
+            <element signature="e#5571#5626#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2523,15 +2521,15 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2523#2567#0" expanded="true" />
-            <element signature="e#2689#2732#0" expanded="true" />
-            <element signature="e#3398#3399#0" expanded="true" />
-            <element signature="e#3464#3465#0" expanded="true" />
-            <element signature="e#3842#3843#0" expanded="true" />
-            <element signature="e#3907#3908#0" expanded="true" />
-            <element signature="e#4737#4783#0" expanded="true" />
-            <element signature="e#4996#5042#0" expanded="true" />
-            <element signature="e#5509#5564#0" expanded="true" />
+            <element signature="e#2585#2629#0" expanded="true" />
+            <element signature="e#2751#2794#0" expanded="true" />
+            <element signature="e#3460#3461#0" expanded="true" />
+            <element signature="e#3526#3527#0" expanded="true" />
+            <element signature="e#3904#3905#0" expanded="true" />
+            <element signature="e#3969#3970#0" expanded="true" />
+            <element signature="e#4799#4845#0" expanded="true" />
+            <element signature="e#5058#5104#0" expanded="true" />
+            <element signature="e#5571#5626#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2563,15 +2561,15 @@
           <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2523#2567#0" expanded="true" />
-            <element signature="e#2689#2732#0" expanded="true" />
-            <element signature="e#3398#3399#0" expanded="true" />
-            <element signature="e#3464#3465#0" expanded="true" />
-            <element signature="e#3842#3843#0" expanded="true" />
-            <element signature="e#3907#3908#0" expanded="true" />
-            <element signature="e#4737#4783#0" expanded="true" />
-            <element signature="e#4996#5042#0" expanded="true" />
-            <element signature="e#5509#5564#0" expanded="true" />
+            <element signature="e#2585#2629#0" expanded="true" />
+            <element signature="e#2751#2794#0" expanded="true" />
+            <element signature="e#3460#3461#0" expanded="true" />
+            <element signature="e#3526#3527#0" expanded="true" />
+            <element signature="e#3904#3905#0" expanded="true" />
+            <element signature="e#3969#3970#0" expanded="true" />
+            <element signature="e#4799#4845#0" expanded="true" />
+            <element signature="e#5058#5104#0" expanded="true" />
+            <element signature="e#5571#5626#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2675,14 +2673,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.185185">
-          <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="70" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_main.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.862069">
@@ -2709,25 +2699,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/CustomDialogFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="129" column="0" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2523#2567#0" expanded="true" />
-            <element signature="e#2689#2732#0" expanded="true" />
-            <element signature="e#3398#3399#0" expanded="true" />
-            <element signature="e#3464#3465#0" expanded="true" />
-            <element signature="e#3842#3843#0" expanded="true" />
-            <element signature="e#3907#3908#0" expanded="true" />
-            <element signature="e#4737#4783#0" expanded="true" />
-            <element signature="e#4996#5042#0" expanded="true" />
-            <element signature="e#5509#5564#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/data/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2736,22 +2707,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="103" column="61" selection-start-line="103" selection-start-column="61" selection-end-line="103" selection-end-column="61" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.185185">
+          <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/HistoryActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <caret line="39" column="59" selection-start-line="39" selection-start-column="59" selection-end-line="39" selection-end-column="59" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/new_entry_dialog.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.965517">
-          <caret line="23" column="40" selection-start-line="23" selection-start-column="40" selection-end-line="23" selection-end-column="40" />
+        <state vertical-scroll-proportion="-5.862069">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
           <folding>
-            <element signature="e#1942#1969#0" expanded="true" />
-            <element signature="e#2488#2510#0" expanded="true" />
-            <element signature="e#2735#2756#0" expanded="true" />
+            <element signature="e#1622#1640#0" expanded="true" />
+            <element signature="e#2012#2039#0" expanded="true" />
+            <element signature="e#2558#2580#0" expanded="true" />
+            <element signature="e#2805#2826#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2759,12 +2749,21 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/MainActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zenoyuki/flavorhythm/gaslogger/CustomDialogFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.07132018">
-          <caret line="72" column="13" selection-start-line="72" selection-start-column="13" selection-end-line="72" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.9028832">
+          <caret line="91" column="77" selection-start-line="91" selection-start-column="77" selection-end-line="91" selection-end-column="77" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2585#2629#0" expanded="true" />
+            <element signature="e#2751#2794#0" expanded="true" />
+            <element signature="e#3460#3461#0" expanded="true" />
+            <element signature="e#3526#3527#0" expanded="true" />
+            <element signature="e#3904#3905#0" expanded="true" />
+            <element signature="e#3969#3970#0" expanded="true" />
+            <element signature="e#4799#4845#0" expanded="true" />
+            <element signature="e#5058#5104#0" expanded="true" />
+            <element signature="e#5571#5626#0" expanded="true" />
           </folding>
         </state>
       </provider>

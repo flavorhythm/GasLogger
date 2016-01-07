@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View customLayout = inflater.inflate(R.layout.new_entry_dialog, container, false);
+        customLayout.requestFocus();
 
         //Creates a dialog with the minimum width of the screen (minus padding)
         int width = getResources().getDisplayMetrics().widthPixels - 350;
