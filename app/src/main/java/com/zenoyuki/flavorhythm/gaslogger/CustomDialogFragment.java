@@ -72,30 +72,8 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
         submit.setOnClickListener(this);
         dismiss.setOnClickListener(this);
 
-        //combine into one uninstantiable class?
-        odomVal.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                odomWrapper.setErrorEnabled(false);
-            }
-        });
-
-        gasVal.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                gasWrapper.setErrorEnabled(false);
-            }
-        });
+        odomVal.addTextChangedListener(new CustomTextWatcher(odomVal.getId()));
+        gasVal.addTextChangedListener(new CustomTextWatcher(gasVal.getId()));
 
         //Removes title space from dialog
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -123,10 +101,8 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
                         odomWrapper.setErrorEnabled(true);
                         odomWrapper.setError(getResources().getString(R.string.blank_error));
                     }
-
                     break;
                 }
-
 
                 int odomNewVal = Integer.parseInt(odomVal.getText().toString());
 
@@ -165,5 +141,33 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 				Toast.makeText(getContext(), "Something went wrong with the buttons", Toast.LENGTH_SHORT).show();
 				break;
 		}
+    }
+
+    private class CustomTextWatcher implements TextWatcher {
+        private int viewID;
+
+        private CustomTextWatcher(int viewID) {
+            this.viewID = viewID;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            switch(viewID) {
+                case R.id.alrt_edt_odom:
+                    odomWrapper.setErrorEnabled(false);
+                    break;
+                case R.id.alrt_edt_gas:
+                    gasWrapper.setErrorEnabled(false);
+                    break;
+                default:
+                    Toast.makeText(getContext(), "Something went wrong with the listener", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
     }
 }
