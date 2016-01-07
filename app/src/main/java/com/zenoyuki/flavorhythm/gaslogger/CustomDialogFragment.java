@@ -1,12 +1,14 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
-import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import data.Constants;
 import data.DatabaseHandler;
 import model.FuelLog;
 
@@ -31,17 +34,16 @@ import model.FuelLog;
  * "this."
  */
 public class CustomDialogFragment extends DialogFragment implements View.OnClickListener {
-    private static final String MIN_MILEAGE_KEY = "min_mileage";
-
     private EditText odomVal, gasVal;
+    private TextInputLayout odomWrapper, gasWrapper;
 
-    public static CustomDialogFragment newInstance(int minMileage) {
-        CustomDialogFragment fragment = new CustomDialogFragment();
-        Bundle args = new Bundle();
-
-        args.putInt(MIN_MILEAGE_KEY, minMileage);
-        fragment.setArguments(args);
-        return fragment;
+    public static CustomDialogFragment newInstance() {
+//        CustomDialogFragment fragment = new CustomDialogFragment();
+//        Bundle args = new Bundle();
+//
+//        args.putInt(MIN_MILEAGE_KEY, minMileage);
+//        fragment.setArguments(args);
+        return new CustomDialogFragment();
     }
 
     @Nullable
@@ -56,11 +58,42 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
         odomVal = (EditText)customLayout.findViewById(R.id.alrt_edt_odom);
         gasVal = (EditText)customLayout.findViewById(R.id.alrt_edt_gas);
 
+        odomWrapper = (TextInputLayout)customLayout.findViewById(R.id.alrt_TIL_odomWrapper);
+        odomWrapper.setHint(getResources().getString(R.string.odom_hint));
+
+        gasWrapper = (TextInputLayout)customLayout.findViewById(R.id.alrt_TIL_gasWrapper);
+        gasWrapper.setHint(getResources().getString(R.string.gas_hint));
+
         Button submit = (Button)customLayout.findViewById(R.id.alrt_btn_submit);
         Button dismiss = (Button)customLayout.findViewById(R.id.alrt_btn_dismiss);
 
         submit.setOnClickListener(this);
         dismiss.setOnClickListener(this);
+
+        //combine into one uninstantiable class?
+        odomVal.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                odomWrapper.setErrorEnabled(false);
+            }
+        });
+
+        gasVal.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                gasWrapper.setErrorEnabled(false);
+            }
+        });
 
         //Removes title space from dialog
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -80,24 +113,30 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
                     //Tests for empty gas usage field first
                     if(gasEmpty) {
                         gasVal.requestFocus();
-                        gasVal.setError(getResources().getString(R.string.gas_blank_error));
+                        gasWrapper.setErrorEnabled(true);
+                        gasWrapper.setError(getResources().getString(R.string.blank_error));
                     }
                     if(odomEmpty) {
                         odomVal.requestFocus();
-                        odomVal.setError(getResources().getString(R.string.odom_blank_error));
+                        odomWrapper.setErrorEnabled(true);
+                        odomWrapper.setError(getResources().getString(R.string.blank_error));
                     }
 
                     break;
                 }
 
+
                 int odomNewVal = Integer.parseInt(odomVal.getText().toString());
-                int minOdom = getArguments().getInt(MIN_MILEAGE_KEY);
+
+                SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                int minOdom = preferences.getInt(Constants.MIN_MILEAGE_KEY, 0);
 
                 if(minOdom >= odomNewVal) {
                     odomVal.requestFocus();
 
                     String minOdomError = getResources().getString(R.string.odom_low_value_error) + " " + String.valueOf(minOdom);
-                    odomVal.setError(minOdomError);
+                    odomWrapper.setErrorEnabled(true);
+                    odomWrapper.setError(minOdomError);
 
                     break;
                 } else {
@@ -110,6 +149,10 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 
                     db.addEntry(fuelLog);
                     db.close();
+
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt(Constants.MIN_MILEAGE_KEY, Integer.parseInt(odomVal.getText().toString()));
+                    editor.apply();
                 }
 			case R.id.alrt_btn_dismiss:
                 getDialog().dismiss();

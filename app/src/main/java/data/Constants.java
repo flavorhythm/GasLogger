@@ -13,4 +13,6 @@ public class Constants {
     public static final String ODOM_VAL = "odometer";
     public static final String FUEL_AMOUNT = "fuel_amount";
     public static final String RECORD_DATE = "record_date";
+
+    public static final String MIN_MILEAGE_KEY = "min_mileage";
 }

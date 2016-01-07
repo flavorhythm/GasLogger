@@ -10,6 +10,7 @@
 
     <string name="toast_item_saved">Successfully saved!</string>
 
+    <string name="blank_error">Cannot be blank</string>
     <string name="odom_blank_error"><i>Whole numbers</i> only</string>
     <string name="odom_low_value_error">Needs a value greater than</string>
     <string name="gas_blank_error"><i>Decimal numbers</i> only</string>

@@ -1,6 +1,7 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import data.Constants;
 import data.DatabaseHandler;
 import model.FuelLog;
 
@@ -22,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
     //CLASS VARIABLES
     private TextView mpgText; //Textview to display average MPG
-	private int minMileage; //Value of last input. Used to validate next input. Passed to CustomDialogFragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,18 +85,21 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<FuelLog> fuelLogArrayList = db.getAllEntries();
         db.close();
 
-        //Finds the most recent entry if entries exist in the DB. If not, sets minMileage to ZERO
-        minMileage = fuelLogArrayList.size() > 0 ? fuelLogArrayList.get(fuelLogArrayList.size() - 1).getCurrentOdomVal() : 0;
-
         //If there are entries in the DB, finds the average MPG
+        if(fuelLogArrayList.size() == 0) {
+            SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+            editor.putInt(Constants.MIN_MILEAGE_KEY, 0);
+
+            editor.apply();
+        }
+
         if(fuelLogArrayList.size() > 1) {
-            int mileage = fuelLogArrayList.get(0).getCurrentOdomVal() - minMileage; //Finds total miles traveled
+            int mileage = fuelLogArrayList.get(0).getCurrentOdomVal() - fuelLogArrayList.get(fuelLogArrayList.size() - 1).getCurrentOdomVal(); //Finds total miles traveled
 
             //Accumulates all gas topups from DB except for the very first (last item in fuelLogArrayList) entry
             float gasUse = 0;
-            for(FuelLog fuelLog : fuelLogArrayList) {
-                gasUse += fuelLog.getFuelTopupAmount();
-            } gasUse -= fuelLogArrayList.get(fuelLogArrayList.size() - 1).getFuelTopupAmount();
+            for(FuelLog fuelLog : fuelLogArrayList) {gasUse += fuelLog.getFuelTopupAmount();}
+            gasUse -= fuelLogArrayList.get(fuelLogArrayList.size() - 1).getFuelTopupAmount();
 
             //Divides total miles traveled by total gas usage
             float mpg = mileage / gasUse;
@@ -113,14 +117,12 @@ public class MainActivity extends AppCompatActivity {
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         Fragment previousFragment = getSupportFragmentManager().findFragmentByTag("dialog");
-        if(previousFragment != null) {
-            fragmentTransaction.remove(previousFragment);
-        }
+        if(previousFragment != null) {fragmentTransaction.remove(previousFragment);}
 
         fragmentTransaction.addToBackStack(null);
 
         //Creates the dialog and passes minMileage to CustomDialogFragment
-        CustomDialogFragment customDialogFragment = CustomDialogFragment.newInstance(minMileage);
+        CustomDialogFragment customDialogFragment = CustomDialogFragment.newInstance();
         customDialogFragment.show(fragmentTransaction, "dialog");
     }
 }
