@@ -1,7 +1,6 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -13,12 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-
-import data.Constants;
-import data.DatabaseHandler;
-import model.FuelLog;
+import data.MpgCalculator;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mpgText = (TextView)findViewById(R.id.TV_display_mpg_value); //Ties mpgText variable to appropriate view
-        mpgText.setText(updateAverage()); //Updates mpgText for the first time with the average milages from DB
+        mpgText.setText("0.0");
 
         FloatingActionButton addBtn = (FloatingActionButton)findViewById(R.id.FAB_add); //Ties addBtn to appropriate view
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        switch (id) {
+        switch(id) {
             case R.id.MI_history:
                 startActivity(new Intent(MainActivity.this, HistoryActivity.class));
                 break;
@@ -74,42 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        mpgText.setText(updateAverage());
-    }
-
-    //Method to update MPG value from DB
-    private String updateAverage() {
-        //Sets up DB variable and puts all entries into arraylist fuelLogArrayList
-        DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-        db.getReadableDatabase();
-        ArrayList<FuelLog> fuelLogArrayList = db.getAllEntries();
-        db.close();
-
-        //If there are entries in the DB, finds the average MPG
-        if(fuelLogArrayList.size() == 0) {
-            SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-            editor.putInt(Constants.MIN_MILEAGE_KEY, 0);
-
-            editor.apply();
-        }
-
-        if(fuelLogArrayList.size() > 1) {
-            int mileage = fuelLogArrayList.get(0).getCurrentOdomVal() - fuelLogArrayList.get(fuelLogArrayList.size() - 1).getCurrentOdomVal(); //Finds total miles traveled
-
-            //Accumulates all gas topups from DB except for the very first (last item in fuelLogArrayList) entry
-            float gasUse = 0;
-            for(FuelLog fuelLog : fuelLogArrayList) {gasUse += fuelLog.getFuelTopupAmount();}
-            gasUse -= fuelLogArrayList.get(fuelLogArrayList.size() - 1).getFuelTopupAmount();
-
-            //Divides total miles traveled by total gas usage
-            double mpg = mileage / gasUse;
-            mpg = mpg < 1000.0 ? mpg : 999.9;
-
-            DecimalFormat df = new DecimalFormat("###.0"); //Formats MPG value
-            return df.format(mpg);
-        } else {
-            return "0";
-        }
+        mpgText.setText(MpgCalculator.calculate(getApplicationContext()));
     }
 
     //Builds a dialog using a fragment
