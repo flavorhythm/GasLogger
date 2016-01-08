@@ -23,7 +23,8 @@
     <TextView android:id="@+id/TV_display_mpg_units"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/mpg"
+        android:text="@string/avg_mpg_label"
+        android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/TV_display_mpg_value"
         android:layout_marginTop="-30dp"/>

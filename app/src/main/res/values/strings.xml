@@ -2,7 +2,7 @@
     <string name="app_name">Gas Logger</string>
     <string name="history">History</string>
     <string name="num_placeholder">99.9</string>
-    <string name="mpg">mpg</string>
+    <string name="avg_mpg_label">Average\nMPG</string>
     <string name="row_odom_label">Odometer:</string>
     <string name="row_gas_label">Gas in Gal:</string>
     <string name="odom_hint">Odometer *</string>
