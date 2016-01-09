@@ -3,18 +3,33 @@
     android:id="@+id/alrt_LL_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <TextView android:id="@+id/alrt_txt_alrtTitle"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/alrt_title"
-        android:layout_marginBottom="10dp"/>
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+		<TextView android:id="@+id/alrt_txt_alrtTitle"
+				  style="?android:attr/textAppearanceLarge"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:text="@string/alrt_title"
+				  android:layout_marginBottom="10dp"/>
+		<TextView android:id="@+id/alrt_txt_partialFill"
+			android:layout_width="210dp"
+			android:layout_height="wrap_content"
+			android:text="@string/partial_fill"
+			android:textAlignment="textEnd"
+			android:layout_marginEnd="5dp"/>
+		<CheckBox android:id="@+id/alrt_chk_partialFill"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+	</LinearLayout>
+
     <android.support.design.widget.TextInputLayout android:id="@+id/alrt_TIL_odomWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -38,7 +53,6 @@
             android:inputType="numberDecimal"
             android:imeOptions="actionDone"/>
     </android.support.design.widget.TextInputLayout>
-
     <TextView android:id="@+id/alrt_txt_asteriskExplanation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
