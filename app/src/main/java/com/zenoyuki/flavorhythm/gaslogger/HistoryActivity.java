@@ -71,6 +71,7 @@ public class HistoryActivity extends AppCompatActivity {
             entry.setCurrentOdomVal(logsFromDB.get(i).getCurrentOdomVal());
             entry.setFuelTopupAmount(logsFromDB.get(i).getFuelTopupAmount());
             entry.setRecordDate(logsFromDB.get(i).getRecordDate());
+            entry.setPartialFill(logsFromDB.get(i).getPartialFill());
             entry.setItemID(logsFromDB.get(i).getItemID());
 
             fuelLogArrayList.add(entry);

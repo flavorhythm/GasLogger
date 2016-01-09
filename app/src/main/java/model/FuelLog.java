@@ -10,19 +10,19 @@ public class FuelLog {
     private int currentOdomVal;       //
     private double fuelTopupAmount;      //
     private long recordDate;          //
-    private boolean skipEntry;
+    private boolean partialFill;
 
     //Setters
     public void setItemID(int itemID) {this.itemID = itemID;}
     public void setCurrentOdomVal(int currentTachVal) {this.currentOdomVal = currentTachVal;}
     public void setFuelTopupAmount(double fuelTopup) {this.fuelTopupAmount = fuelTopup;}
     public void setRecordDate(long recordDate) {this.recordDate = recordDate;}
-    public void setSkipEntry(boolean skipEntry) {this.skipEntry = skipEntry;}
+    public void setPartialFill(boolean partialFill) {this.partialFill = partialFill;}
 
     //Getters
     public int getItemID() {return itemID;}
     public int getCurrentOdomVal() {return currentOdomVal;}
     public double getFuelTopupAmount() {return fuelTopupAmount;}
     public long getRecordDate() {return recordDate;}
-    public boolean getSkipEntry() {return skipEntry;}
+    public boolean getPartialFill() {return partialFill;}
 }

@@ -5,13 +5,14 @@ package data;
  * Constants class holding SQL database/table/column names
  */
 public final class Constants {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "fuel_db";
     public static final String TABLE_NAME = "fueling_tbl";
 
     public static final String KEY_ID = "_id";
     public static final String ODOM_VAL = "odometer";
     public static final String FUEL_AMOUNT = "fuel_amount";
+    public static final String PARTIAL_FILL = "partial_fill";
     public static final String RECORD_DATE = "record_date";
 
     public static final String MIN_MILEAGE_KEY = "min_mileage";

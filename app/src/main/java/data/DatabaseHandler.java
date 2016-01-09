@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 KEY_ID + " INTEGER PRIMARY KEY, " +
                 ODOM_VAL + " INTEGER, " +
                 FUEL_AMOUNT + " REAL, " +
+                PARTIAL_FILL + " INTEGER, " +
                 RECORD_DATE + " INTEGER);";
 
         //Passes SQL command
@@ -65,6 +67,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         KEY_ID,
                         ODOM_VAL,
                         FUEL_AMOUNT,
+                        PARTIAL_FILL,
                         RECORD_DATE
                 },
                 null,
@@ -82,6 +85,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 fuelLog.setItemID(cursor.getInt(cursor.getColumnIndex(KEY_ID))); //Sets fuelLog object's itemID variable to data within database
                 fuelLog.setCurrentOdomVal(cursor.getInt(cursor.getColumnIndex(ODOM_VAL))); //Sets fuelLog object's currentOdomVal variable to data within database
                 fuelLog.setFuelTopupAmount(cursor.getDouble(cursor.getColumnIndex(FUEL_AMOUNT))); //Sets fuelLog object's fuelTopupAmount variable to data within database
+				fuelLog.setPartialFill(cursor.getInt(cursor.getColumnIndex(PARTIAL_FILL)) == 1);
+				Log.v("partial in getAllEntries, DatabaseHandler", String.valueOf(cursor.getInt(cursor.getColumnIndex(PARTIAL_FILL)) == 1));
+
                 fuelLog.setRecordDate(cursor.getLong(cursor.getColumnIndex(RECORD_DATE)));
 
                 fuelLogList.add(fuelLog); //Adds the entire fuelLog object into the fuelLogList
@@ -97,10 +103,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void addEntry(FuelLog entry) {
         SQLiteDatabase db = this.getWritableDatabase();
+        int partialFillInt = entry.getPartialFill() ? 1 : 0;
+
+		Log.v("partial in addEntry, DatabaseHandler", String.valueOf(partialFillInt));
 
         ContentValues values = new ContentValues();
         values.put(ODOM_VAL, entry.getCurrentOdomVal());
         values.put(FUEL_AMOUNT, entry.getFuelTopupAmount());
+        values.put(PARTIAL_FILL, partialFillInt);
         values.put(RECORD_DATE, System.currentTimeMillis());
 
         db.insert(TABLE_NAME, null, values);
@@ -121,10 +131,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void editEntry(FuelLog entry) {
         SQLiteDatabase db = this.getWritableDatabase();
+        int partialFillInt = entry.getPartialFill() ? 1 : 0;
 
         ContentValues values = new ContentValues();
         values.put(ODOM_VAL, entry.getCurrentOdomVal());
         values.put(FUEL_AMOUNT, entry.getFuelTopupAmount());
+        values.put(PARTIAL_FILL, partialFillInt);
         values.put(RECORD_DATE, System.currentTimeMillis());
 
         db.update(

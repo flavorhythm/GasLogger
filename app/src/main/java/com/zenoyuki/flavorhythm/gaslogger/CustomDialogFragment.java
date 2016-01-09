@@ -9,11 +9,13 @@ import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -44,7 +46,10 @@ import model.FuelLog;
  * }
  */
 public class CustomDialogFragment extends DialogFragment implements View.OnClickListener {
-    private EditText odomVal, gasVal;
+	private View customLayout;
+	private EditText odomVal, gasVal;
+	private CheckBox partialFillCheck;
+	private Button submit, dismiss;
     private TextInputLayout odomWrapper, gasWrapper;
 
     public static CustomDialogFragment newInstance() {
@@ -54,24 +59,13 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View customLayout = inflater.inflate(R.layout.new_entry_dialog, container, false);
+        customLayout = inflater.inflate(R.layout.new_entry_dialog, container, false);
         customLayout.requestFocus();
 
-        //Creates a dialog with the minimum width of the screen (minus padding)
-        int width = getResources().getDisplayMetrics().widthPixels - 350;
-        customLayout.setMinimumWidth(width);
+		findViewsByID();
 
-        odomVal = (EditText)customLayout.findViewById(R.id.alrt_edt_odom);
-        gasVal = (EditText)customLayout.findViewById(R.id.alrt_edt_gas);
-
-        odomWrapper = (TextInputLayout)customLayout.findViewById(R.id.alrt_TIL_odomWrapper);
         odomWrapper.setHint(getResources().getString(R.string.odom_hint));
-
-        gasWrapper = (TextInputLayout)customLayout.findViewById(R.id.alrt_TIL_gasWrapper);
         gasWrapper.setHint(getResources().getString(R.string.gas_hint));
-
-        Button submit = (Button)customLayout.findViewById(R.id.alrt_btn_submit);
-        Button dismiss = (Button)customLayout.findViewById(R.id.alrt_btn_dismiss);
 
         submit.setOnClickListener(this);
         dismiss.setOnClickListener(this);
@@ -81,6 +75,10 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 
         //Removes title space from dialog
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+		//Creates a dialog with the minimum width of the screen (minus padding)
+		int width = getResources().getDisplayMetrics().widthPixels - 350;
+		customLayout.setMinimumWidth(width);
 
         return customLayout;
     }
@@ -128,6 +126,8 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 
                     fuelLog.setCurrentOdomVal(Integer.parseInt(odomVal.getText().toString()));
                     fuelLog.setFuelTopupAmount(Float.parseFloat(gasVal.getText().toString()));
+					fuelLog.setPartialFill(partialFillCheck.isChecked());
+					Log.v("partial in CustomDialogFragment", String.valueOf(partialFillCheck.isChecked()));
 
                     db.addEntry(fuelLog);
                     db.close();
@@ -146,6 +146,19 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 				break;
 		}
     }
+
+	private void findViewsByID() {
+		odomVal = (EditText)customLayout.findViewById(R.id.alrt_edt_odom);
+		gasVal = (EditText)customLayout.findViewById(R.id.alrt_edt_gas);
+
+		partialFillCheck = (CheckBox)customLayout.findViewById(R.id.alrt_chk_partialFill);
+
+		odomWrapper = (TextInputLayout)customLayout.findViewById(R.id.alrt_TIL_odomWrapper);
+		gasWrapper = (TextInputLayout)customLayout.findViewById(R.id.alrt_TIL_gasWrapper);
+
+		submit = (Button)customLayout.findViewById(R.id.alrt_btn_submit);
+		dismiss = (Button)customLayout.findViewById(R.id.alrt_btn_dismiss);
+	}
 
     private class CustomTextWatcher implements TextWatcher {
         private int viewID;

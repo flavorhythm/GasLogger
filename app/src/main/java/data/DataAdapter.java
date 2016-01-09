@@ -76,6 +76,7 @@ public class DataAdapter extends ArrayAdapter<FuelLog> {
         FuelLog entry = getItem(position);
 
         viewHolder.odomHolder.setText(String.valueOf(entry.getCurrentOdomVal()));
+//		viewHolder.gasHolder.setText(String.valueOf(entry.getPartialFill()));
         viewHolder.gasHolder.setText(String.valueOf(entry.getFuelTopupAmount()));
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
