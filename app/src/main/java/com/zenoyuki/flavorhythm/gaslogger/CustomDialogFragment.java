@@ -32,17 +32,22 @@ import model.FuelLog;
  * This is because the instantiation (I believe it's an instance to save memory, instead of creating an object via a constructor)
  * needs to be declared static (can be declared just public. Maybe this would create a crash? must test) and static methods cannot pull from
  * "this."
+ *
+ * Example:
+ * public static CustomDialogFragment newInstance() {
+ *       CustomDialogFragment fragment = new CustomDialogFragment();
+ *        Bundle args = new Bundle();
+ *
+ *        args.putInt(MIN_MILEAGE_KEY, minMileage);
+ *        fragment.setArguments(args);
+ *        return new CustomDialogFragment();
+ * }
  */
 public class CustomDialogFragment extends DialogFragment implements View.OnClickListener {
     private EditText odomVal, gasVal;
     private TextInputLayout odomWrapper, gasWrapper;
 
     public static CustomDialogFragment newInstance() {
-//        CustomDialogFragment fragment = new CustomDialogFragment();
-//        Bundle args = new Bundle();
-//
-//        args.putInt(MIN_MILEAGE_KEY, minMileage);
-//        fragment.setArguments(args);
         return new CustomDialogFragment();
     }
 
@@ -105,7 +110,7 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 
                 int odomNewVal = Integer.parseInt(odomVal.getText().toString());
 
-                SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences preferences = getContext().getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);
                 int minOdom = preferences.getInt(Constants.MIN_MILEAGE_KEY, 0);
 
                 if(minOdom >= odomNewVal) {

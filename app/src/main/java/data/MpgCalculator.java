@@ -26,7 +26,7 @@ public final class MpgCalculator {
         switch(fuelLogArrayList.size()) {
             //If there no entries in the DB, the preferences is updated to the value ZERO.
             //This is done so that if the DB is cleared, the user can input any odometer value.
-            case 0: clearPreferences();
+            case 0: clearPreferences(context);
             //If there are no entries (from the case above with no "break") or just one entry in the DB, returns ZERO.
             //This is done because there aren't enough entries to calculate an MPG value from.
             case 1: return "0";
@@ -35,8 +35,8 @@ public final class MpgCalculator {
         }
     }
 
-    private static void clearPreferences() {
-        SharedPreferences.Editor editor = new Activity().getPreferences(Activity.MODE_PRIVATE).edit();
+    private static void clearPreferences(Context context) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit();
         editor.putInt(Constants.MIN_MILEAGE_KEY, 0);
 
         editor.apply();
