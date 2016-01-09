@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import data.MpgCalculator;
+import Utils.MpgCalculator;
 
 public class MainActivity extends AppCompatActivity {
 

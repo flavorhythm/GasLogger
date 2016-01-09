@@ -1,4 +1,4 @@
-package data;
+package Utils;
 
 /**
  * Created by zyuki on 11/30/2015.

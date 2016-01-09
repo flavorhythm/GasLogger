@@ -1,12 +1,12 @@
-package data;
+package Utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import data.DatabaseHandler;
 import model.FuelLog;
 
 /**
@@ -50,10 +50,12 @@ public final class MpgCalculator {
             FuelLog fuelLogNext = fuelLogArrayList.get(i - 1);
             FuelLog fuelLogCurrent = fuelLogArrayList.get(i);
 
-            double gasUsed = fuelLogNext.getFuelTopupAmount();
-            int distTravel = fuelLogNext.getCurrentOdomVal() - fuelLogCurrent.getCurrentOdomVal();
+            if(!fuelLogCurrent.getPartialFill() && !fuelLogNext.getPartialFill()) {
+                double gasUsed = fuelLogNext.getFuelTopupAmount();
+                int distTravel = fuelLogNext.getCurrentOdomVal() - fuelLogCurrent.getCurrentOdomVal();
 
-            mpgList.add(distTravel / gasUsed);
+                mpgList.add(distTravel / gasUsed);
+            }
         }
 
         double mpgAvg = 0;

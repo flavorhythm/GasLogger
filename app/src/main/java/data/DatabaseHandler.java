@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import model.FuelLog;
 
-import static data.Constants.*;
+import static Utils.Constants.*;
 
 /**
  * Created by zyuki on 11/30/2015.

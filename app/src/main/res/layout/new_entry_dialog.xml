@@ -1,80 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     android:id="@+id/alrt_LL_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:padding="20dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:layout_height="wrap_content">
 
-	<RelativeLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content">
-		<TextView android:id="@+id/alrt_txt_alrtTitle"
-		    style="?android:attr/textAppearanceLarge"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="@string/alrt_title"
-		    android:layout_marginBottom="10dp"/>
-		<TextView android:id="@+id/alrt_txt_partialFill"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/partial_fill"
-			android:layout_toStartOf="@+id/alrt_chk_partialFill"
-            android:layout_alignBaseline="@id/alrt_txt_alrtTitle"
-			android:layout_marginEnd="5dp"/>
-		<CheckBox android:id="@+id/alrt_chk_partialFill"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/alrt_txt_alrtTitle"
-            android:layout_alignParentEnd="true"/>
-	</RelativeLayout>
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:focusable="true"
+  		android:focusableInTouchMode="true">
+		<RelativeLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
+				<TextView android:id="@+id/alrt_txt_alrtTitle"
+				    style="?android:attr/textAppearanceLarge"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="@string/alrt_title"
+				    android:layout_marginBottom="10dp"/>
+				<TextView android:id="@+id/alrt_txt_partialFill"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/partial_fill"
+					android:layout_toStartOf="@+id/alrt_chk_partialFill"
+		            android:layout_alignBaseline="@id/alrt_txt_alrtTitle"
+					android:layout_marginEnd="5dp"/>
+				<CheckBox android:id="@+id/alrt_chk_partialFill"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+		            android:layout_alignBaseline="@+id/alrt_txt_alrtTitle"
+		            android:layout_alignParentEnd="true"/>
+			</RelativeLayout>
 
-    <android.support.design.widget.TextInputLayout android:id="@+id/alrt_TIL_odomWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText android:id="@+id/alrt_edt_odom"
-            style="?android:attr/textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/hint_color"
-            android:hint="@string/odom_hint"
-            android:inputType="number"/>
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout android:id="@+id/alrt_TIL_gasWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText android:id="@+id/alrt_edt_gas"
-            style="?android:attr/textAppearanceMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/gas_hint"
-            android:textColorHint="@color/hint_color"
-            android:inputType="numberDecimal"
-            android:imeOptions="actionDone"/>
-    </android.support.design.widget.TextInputLayout>
-    <TextView android:id="@+id/alrt_txt_asteriskExplanation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/required_asterisk"
-        android:layout_marginTop="5dp"/>
-    <LinearLayout android:id="@+id/alrt_LL_btnGroup"
-        style="?android:buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="horizontal">
-        <Button android:id="@+id/alrt_btn_dismiss"
-            style="?android:buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/alrt_dismiss"/>
-        <Button android:id="@+id/alrt_btn_submit"
-            style="?android:buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/alrt_submit"/>
-    </LinearLayout>
-</LinearLayout>
+		    <android.support.design.widget.TextInputLayout android:id="@+id/alrt_TIL_odomWrapper"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content">
+		        <EditText android:id="@+id/alrt_edt_odom"
+		            style="?android:attr/textAppearanceMedium"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:textColorHint="@color/hint_color"
+		            android:hint="@string/odom_hint"
+		            android:inputType="number"/>
+		    </android.support.design.widget.TextInputLayout>
+		    <android.support.design.widget.TextInputLayout android:id="@+id/alrt_TIL_gasWrapper"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content">
+		        <EditText android:id="@+id/alrt_edt_gas"
+		            style="?android:attr/textAppearanceMedium"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:hint="@string/gas_hint"
+		            android:textColorHint="@color/hint_color"
+		            android:inputType="numberDecimal"
+		            android:imeOptions="actionDone"/>
+		    </android.support.design.widget.TextInputLayout>
+		    <TextView android:id="@+id/alrt_txt_asteriskExplanation"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/required_asterisk"
+		        android:layout_marginTop="5dp"/>
+		    <LinearLayout android:id="@+id/alrt_LL_btnGroup"
+		        style="?android:buttonBarStyle"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:gravity="end"
+		        android:orientation="horizontal">
+		        <Button android:id="@+id/alrt_btn_dismiss"
+		            style="?android:buttonBarButtonStyle"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/alrt_dismiss"/>
+		        <Button android:id="@+id/alrt_btn_submit"
+		            style="?android:buttonBarButtonStyle"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="@string/alrt_submit"/>
+		    </LinearLayout>
+	</LinearLayout>
+
+
+</RelativeLayout>

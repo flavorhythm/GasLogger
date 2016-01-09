@@ -19,7 +19,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import data.Constants;
+import Utils.Constants;
 import data.DatabaseHandler;
 import model.FuelLog;
 
