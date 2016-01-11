@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.zenoyuki.flavorhythm.gaslogger.ApplicationCommons;
 import com.zenoyuki.flavorhythm.gaslogger.R;
 
 import java.text.SimpleDateFormat;
@@ -108,12 +109,8 @@ public class DataAdapter extends ArrayAdapter<FuelLog> {
         builder.setPositiveButton("Destroy!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                DatabaseHandler db = new DatabaseHandler(getContext());
-                db.getWritableDatabase();
-
-                db.deleteEntry(itemID);
-//                notifyDataSetChanged(); //I do not believe this is in the correct place. Dataset changes once "refreshdata()" is invoked in HistoryActivity.java
-                db.close();
+                DataAccessObject dataAO = ((ApplicationCommons)getContext().getApplicationContext()).mDataAO;
+                dataAO.deleteEntry(itemID);
             }
         });
         builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {

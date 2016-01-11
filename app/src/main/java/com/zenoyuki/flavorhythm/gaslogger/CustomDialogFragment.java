@@ -18,7 +18,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.sql.SQLException;
+
 import Utils.Constants;
+import data.DataAccessObject;
 import data.DatabaseHandler;
 import model.FuelLog;
 
@@ -50,6 +53,8 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 	private CheckBox partialFillCheck;
 	private Button submit, dismiss;
     private TextInputLayout odomWrapper, gasWrapper;
+
+    private DataAccessObject dataAO;
 
     public static CustomDialogFragment newInstance() {
         return new CustomDialogFragment();
@@ -92,16 +97,8 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
                 //Tests for empty fields. If either fields are empty, further validation goes on here in these nested IF blocks
                 if(odomEmpty || gasEmpty) {
                     //Tests for empty gas usage field first
-                    if(gasEmpty) {
-                        gasVal.requestFocus();
-                        gasWrapper.setErrorEnabled(true);
-                        gasWrapper.setError(getResources().getString(R.string.blank_error));
-                    }
-                    if(odomEmpty) {
-                        odomVal.requestFocus();
-                        odomWrapper.setErrorEnabled(true);
-                        odomWrapper.setError(getResources().getString(R.string.blank_error));
-                    }
+                    if(gasEmpty) {errorDisplay(gasWrapper, getResources().getString(R.string.blank_error));}
+                    if(odomEmpty) {errorDisplay(odomWrapper, getResources().getString(R.string.blank_error));}
                     break;
                 }
 
@@ -111,25 +108,18 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
                 int minOdom = preferences.getInt(Constants.MIN_MILEAGE_KEY, 0);
 
                 if(minOdom >= odomNewVal) {
-                    odomVal.requestFocus();
-
-                    String minOdomError = getResources().getString(R.string.odom_low_value_error) + " " + String.valueOf(minOdom);
-                    odomWrapper.setErrorEnabled(true);
-                    odomWrapper.setError(minOdomError);
-
+                    errorDisplay(odomWrapper, getResources().getString(R.string.odom_low_value_error) + " " + String.valueOf(minOdom));
                     break;
                 } else {
-                    DatabaseHandler db = new DatabaseHandler(getContext());
                     FuelLog fuelLog = new FuelLog();
-                    db.getWritableDatabase();
 
                     fuelLog.setCurrentOdomVal(Integer.parseInt(odomVal.getText().toString()));
                     fuelLog.setFuelTopupAmount(Float.parseFloat(gasVal.getText().toString()));
 					fuelLog.setPartialFill(partialFillCheck.isChecked());
 //					Log.v("partial in CustomDialogFragment", String.valueOf(partialFillCheck.isChecked()));
 
-                    db.addEntry(fuelLog);
-                    db.close();
+                    dataAO = ((ApplicationCommons)getActivity().getApplication()).mDataAO;
+                    dataAO.addEntry(fuelLog);
 
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putInt(Constants.MIN_MILEAGE_KEY, Integer.parseInt(odomVal.getText().toString()));
@@ -146,7 +136,13 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 		}
     }
 
-	private void findViewsByID() {
+    private void errorDisplay(TextInputLayout wrapper, String errorString) {
+        wrapper.requestFocus();
+        wrapper.setErrorEnabled(true);
+        wrapper.setError(errorString);
+    }
+
+    private void findViewsByID() {
 		odomVal = (EditText)customLayout.findViewById(R.id.alrt_edt_odom);
 		gasVal = (EditText)customLayout.findViewById(R.id.alrt_edt_gas);
 
