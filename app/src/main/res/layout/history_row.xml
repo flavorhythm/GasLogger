@@ -39,6 +39,15 @@
             android:layout_marginStart="5dp"/>
     </RelativeLayout>
 
+    <ImageView android:id="@+id/IV_partial_fill_icon"
+		android:layout_width="@dimen/partial_icon_size"
+		android:layout_height="@dimen/partial_icon_size"
+		android:src="@drawable/partial_fill_icon"
+		android:layout_alignBottom="@+id/TV_row_timestamp"
+		android:layout_alignParentRight="@+id/TV_row_timestamp"
+		android:layout_marginEnd="10dp"
+		android:visibility="invisible"/>
+
     <TextView android:id="@+id/TV_row_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zenoyuki.flavorhythm.gaslogger.R;
@@ -64,6 +65,7 @@ public class DataAdapter extends ArrayAdapter<FuelLog> {
             viewHolder.odomHolder = (TextView)row.findViewById(R.id.TV_row_odom);
             viewHolder.gasHolder = (TextView)row.findViewById(R.id.TV_row_gas);
             viewHolder.timestampHolder = (TextView)row.findViewById(R.id.TV_row_timestamp);
+            viewHolder.partialIcon = (ImageView)row.findViewById(R.id.IV_partial_fill_icon);
 
 //            viewHolder.editBtn = (ImageButton)row.findViewById(R.id.IB_row_edit);
             viewHolder.delBtn = (ImageButton)row.findViewById(R.id.IB_row_delete);
@@ -82,6 +84,8 @@ public class DataAdapter extends ArrayAdapter<FuelLog> {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
         Date date = new Date(entry.getRecordDate());
         viewHolder.timestampHolder.setText(simpleDateFormat.format(date));
+
+        if(entry.getPartialFill()) {viewHolder.partialIcon.setVisibility(View.VISIBLE);}
 
         final int finalEntryID = entry.getItemID();
         final int finalOdomVal = entry.getCurrentOdomVal();
@@ -108,7 +112,7 @@ public class DataAdapter extends ArrayAdapter<FuelLog> {
                 db.getWritableDatabase();
 
                 db.deleteEntry(itemID);
-                notifyDataSetChanged();
+//                notifyDataSetChanged(); //I do not believe this is in the correct place. Dataset changes once "refreshdata()" is invoked in HistoryActivity.java
                 db.close();
             }
         });
@@ -129,5 +133,7 @@ public class DataAdapter extends ArrayAdapter<FuelLog> {
         TextView timestampHolder;
 //        ImageButton editBtn;
         ImageButton delBtn;
+
+        ImageView partialIcon;
     }
 }

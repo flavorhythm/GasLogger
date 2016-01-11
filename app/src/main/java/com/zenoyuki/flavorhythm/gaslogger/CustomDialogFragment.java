@@ -9,7 +9,6 @@ import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,7 +126,7 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
                     fuelLog.setCurrentOdomVal(Integer.parseInt(odomVal.getText().toString()));
                     fuelLog.setFuelTopupAmount(Float.parseFloat(gasVal.getText().toString()));
 					fuelLog.setPartialFill(partialFillCheck.isChecked());
-					Log.v("partial in CustomDialogFragment", String.valueOf(partialFillCheck.isChecked()));
+//					Log.v("partial in CustomDialogFragment", String.valueOf(partialFillCheck.isChecked()));
 
                     db.addEntry(fuelLog);
                     db.close();
