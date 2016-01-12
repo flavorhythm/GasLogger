@@ -1,12 +1,14 @@
-package Utils;
+package util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.zenoyuki.flavorhythm.gaslogger.ApplicationDatabase;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import data.DatabaseHandler;
+import data.DataAccessObject;
 import model.FuelLog;
 
 /**
@@ -17,10 +19,8 @@ public final class MpgCalculator {
 
     public static String calculate(Context context) {
         //Sets up DB variable and puts all entries into arraylist fuelLogArrayList
-        DatabaseHandler db = new DatabaseHandler(context);
-        db.getReadableDatabase();
-        ArrayList<FuelLog> fuelLogArrayList = db.getAllEntries();
-        db.close();
+        DataAccessObject dataAO = ((ApplicationDatabase)context).mDataAO;
+        ArrayList<FuelLog> fuelLogArrayList = dataAO.getEntries(null, null);
 
         //There are only three possible outcomes of this switch. Negative numbers are irrelevant since user cannot input a negative value.
         switch(fuelLogArrayList.size()) {

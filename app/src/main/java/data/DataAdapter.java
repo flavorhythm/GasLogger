@@ -1,8 +1,6 @@
 package data;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +9,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.zenoyuki.flavorhythm.gaslogger.ApplicationCommons;
 import com.zenoyuki.flavorhythm.gaslogger.R;
 
 import java.text.SimpleDateFormat;
@@ -20,6 +17,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import model.FuelLog;
+import fragments.DialogFragmentRouter;
 
 /**
  * Created by ZYuki on 1/4/2016.
@@ -87,40 +85,18 @@ public class DataAdapter extends ArrayAdapter<FuelLog> {
         viewHolder.timestampHolder.setText(simpleDateFormat.format(date));
 
         if(entry.getPartialFill()) {viewHolder.partialIcon.setVisibility(View.VISIBLE);}
+        else {viewHolder.partialIcon.setVisibility(View.INVISIBLE);}
 
         final int finalEntryID = entry.getItemID();
-        final int finalOdomVal = entry.getCurrentOdomVal();
         viewHolder.delBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteAlert(String.valueOf(finalOdomVal), finalEntryID);
+                DialogFragmentRouter.instantiateDeleteItemsDF(activity, finalEntryID);
             }
         });
 //        viewHolder.editBtn.setOnClickListener(new View.OnClickListener() {});
 
         return row;
-    }
-
-    private void deleteAlert(String odomVal, final int itemID) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Topup at: " + odomVal + " miles");
-        builder.setMessage("Delete?");
-
-        builder.setPositiveButton("Destroy!", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                DataAccessObject dataAO = ((ApplicationCommons)getContext().getApplicationContext()).mDataAO;
-                dataAO.deleteEntry(itemID);
-            }
-        });
-        builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        builder.create().show();
     }
 
     private class ViewHolder {

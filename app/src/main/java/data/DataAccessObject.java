@@ -5,13 +5,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Utils.Constants;
+import util.Constants;
 import model.FuelLog;
 
 import static data.FillupTable.*;
@@ -62,8 +61,8 @@ public class DataAccessObject {
         updatePreferences();
     }
 
-    public FuelLog getEntry(String selection) {
-        ArrayList<FuelLog> fuelLogArrayList = getEntries(selection);
+    public FuelLog getEntry(String selection, String[] selectionArgs) {
+        ArrayList<FuelLog> fuelLogArrayList = getEntries(selection, selectionArgs);
 
         if(fuelLogArrayList.size() == 1) {
             return fuelLogArrayList.get(0);
@@ -72,13 +71,13 @@ public class DataAccessObject {
         }
     }
 
-    public ArrayList<FuelLog> getEntries(String nullableSelection) {
+    public ArrayList<FuelLog> getEntries(String nullableSelection, String[] nullableSelectionArgs) {
         ArrayList<FuelLog> fuelLogArrayList = new ArrayList<>();
         Cursor cursor = db.query(
                 TABLE_NAME,
                 ALL_COLUMNS,
                 nullableSelection,
-                null,
+                nullableSelectionArgs,
                 null,
                 null,
                 RECORD_DATE + " DESC"
@@ -107,13 +106,12 @@ public class DataAccessObject {
     private void updatePreferences() {
         String selection = ODOM_VAL + " = (SELECT MAX(" + ODOM_VAL + ") FROM " + TABLE_NAME + ")";
 
-        FuelLog entry = this.getEntry(selection);
+
+        FuelLog entry = this.getEntry(selection, null);
 
         if(entry != null) {
             SharedPreferences.Editor editor = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit();
             editor.putInt(Constants.MIN_MILEAGE_KEY, entry.getCurrentOdomVal());
-
-
 
             editor.apply();
         } else {

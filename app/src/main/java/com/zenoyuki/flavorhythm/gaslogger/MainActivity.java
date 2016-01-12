@@ -3,8 +3,6 @@ package com.zenoyuki.flavorhythm.gaslogger;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,7 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import Utils.MpgCalculator;
+import fragments.DialogFragmentRouter;
+import util.MpgCalculator;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogBuilder();
+                DialogFragmentRouter.instantiateDataEntryDF(MainActivity.this);
             }
         }); //Sets action to addBtn when pressed
     }
@@ -69,20 +68,5 @@ public class MainActivity extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
 
         mpgText.setText(MpgCalculator.calculate(getApplicationContext()));
-    }
-
-    //Builds a dialog using a fragment
-    private void dialogBuilder() {
-        //Cleans up any previously open fragments with the tag "dialog"
-		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-
-        Fragment previousFragment = getSupportFragmentManager().findFragmentByTag("dialog");
-        if(previousFragment != null) {fragmentTransaction.remove(previousFragment);}
-
-        fragmentTransaction.addToBackStack(null);
-
-        //Creates the dialog and passes minMileage to CustomDialogFragment
-        CustomDialogFragment customDialogFragment = CustomDialogFragment.newInstance();
-        customDialogFragment.show(fragmentTransaction, "dialog");
     }
 }

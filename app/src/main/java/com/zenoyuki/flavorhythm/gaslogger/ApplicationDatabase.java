@@ -1,6 +1,8 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
 import android.app.Application;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 import java.sql.SQLException;
 
@@ -9,7 +11,7 @@ import data.DataAccessObject;
 /**
  * Created by ZYuki on 1/11/2016.
  */
-public class ApplicationCommons extends Application {
+public class ApplicationDatabase extends Application {
 
     public DataAccessObject mDataAO;
 

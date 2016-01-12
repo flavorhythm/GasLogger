@@ -1,4 +1,4 @@
-package com.zenoyuki.flavorhythm.gaslogger;
+package fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,36 +18,36 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.sql.SQLException;
+import com.zenoyuki.flavorhythm.gaslogger.ApplicationDatabase;
+import com.zenoyuki.flavorhythm.gaslogger.R;
 
-import Utils.Constants;
+import util.Constants;
 import data.DataAccessObject;
-import data.DatabaseHandler;
 import model.FuelLog;
 
 /**
  * Created by zyuki on 12/23/2015.
  * Reason why you cannot do the following:
- * public class CustomDialogFragment extends DialogFragment implements View.OnClickListener {
+ * public class DataEntryDialogFragment extends DialogFragment implements View.OnClickListener {
  *     private static final String MIN_MILEAGE_KEY = "min_mileage";
  *     private String myVar;
- * public static CustomDialogFragment newInstance(int minMileage, String myVar) {
+ * public static DataEntryDialogFragment newInstance(int minMileage, String myVar) {
  *     this.myVar = myVar;
  * This is because the instantiation (I believe it's an instance to save memory, instead of creating an object via a constructor)
  * needs to be declared static (can be declared just public. Maybe this would create a crash? must test) and static methods cannot pull from
  * "this."
  *
  * Example:
- * public static CustomDialogFragment newInstance() {
- *       CustomDialogFragment fragment = new CustomDialogFragment();
+ * public static DataEntryDialogFragment newInstance() {
+ *       DataEntryDialogFragment fragment = new DataEntryDialogFragment();
  *        Bundle args = new Bundle();
  *
  *        args.putInt(MIN_MILEAGE_KEY, minMileage);
  *        fragment.setArguments(args);
- *        return new CustomDialogFragment();
+ *        return new DataEntryDialogFragment();
  * }
  */
-public class CustomDialogFragment extends DialogFragment implements View.OnClickListener {
+public class DataEntryDialogFragment extends DialogFragment implements View.OnClickListener {
 	private View customLayout;
 	private EditText odomVal, gasVal;
 	private CheckBox partialFillCheck;
@@ -56,8 +56,8 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
 
     private DataAccessObject dataAO;
 
-    public static CustomDialogFragment newInstance() {
-        return new CustomDialogFragment();
+    public static DataEntryDialogFragment newInstance() {
+        return new DataEntryDialogFragment();
     }
 
     @Nullable
@@ -116,9 +116,9 @@ public class CustomDialogFragment extends DialogFragment implements View.OnClick
                     fuelLog.setCurrentOdomVal(Integer.parseInt(odomVal.getText().toString()));
                     fuelLog.setFuelTopupAmount(Float.parseFloat(gasVal.getText().toString()));
 					fuelLog.setPartialFill(partialFillCheck.isChecked());
-//					Log.v("partial in CustomDialogFragment", String.valueOf(partialFillCheck.isChecked()));
+//					Log.v("partial in DataEntryDialogFragment", String.valueOf(partialFillCheck.isChecked()));
 
-                    dataAO = ((ApplicationCommons)getActivity().getApplication()).mDataAO;
+                    dataAO = ((ApplicationDatabase)getActivity().getApplication()).mDataAO;
                     dataAO.addEntry(fuelLog);
 
                     SharedPreferences.Editor editor = preferences.edit();

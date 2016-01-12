@@ -9,9 +9,8 @@ import java.util.ArrayList;
 
 import data.DataAccessObject;
 import data.DataAdapter;
-import data.DatabaseHandler;
-import data.FillupTable;
 import model.FuelLog;
+import fragments.DialogFragmentRouter;
 
 public class HistoryActivity extends AppCompatActivity {
     private ArrayList<FuelLog> fuelLogArrayList = new ArrayList<>();
@@ -24,7 +23,7 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        dataAO = ((ApplicationCommons)getApplication()).mDataAO;
+        dataAO = ((ApplicationDatabase)getApplication()).mDataAO;
 
         listView = (ListView)findViewById(R.id.LV_history);
         listView.setEmptyView(findViewById(R.id.empty_txt_emptyListText));
@@ -48,7 +47,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         switch(id) {
             case R.id.MI_del_all:
-                //createDialog
+                DialogFragmentRouter.instantiateDeleteItemsDF(HistoryActivity.this, DialogFragmentRouter.ALL_ID);
                 break;
             default:
                 break;
@@ -69,7 +68,7 @@ public class HistoryActivity extends AppCompatActivity {
         DataAdapter dataAdapter = new DataAdapter(HistoryActivity.this, R.layout.history_row, fuelLogArrayList);
         listView.setAdapter(dataAdapter);
 
-        ArrayList<FuelLog> logsFromDB = dataAO.getEntries(null);
+        ArrayList<FuelLog> logsFromDB = dataAO.getEntries(null, null);
         for(int i = 0; i < logsFromDB.size(); i++) {
             FuelLog entry = new FuelLog();
 
