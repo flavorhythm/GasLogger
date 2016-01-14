@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="text_color">#525252</color>
     <color name="hint_color">#9B9B9B</color>
+    <color name="deleteTextBtn">#B30000</color>
 </resources>

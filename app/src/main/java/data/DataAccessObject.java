@@ -19,6 +19,8 @@ import static data.FillupTable.*;
  * Created by ZYuki on 1/11/2016.
  */
 public class DataAccessObject {
+    private static final int DEL_ALL = -1;
+
     private SQLiteDatabase db;
     private DatabaseHelper dbHelper;
     private Context context;
@@ -51,18 +53,8 @@ public class DataAccessObject {
         updatePreferences();
     }
 
-    public void deleteEntry(int id) {
-        db.delete(
-                TABLE_NAME,
-                KEY_ID + " = " + id,
-                null
-        );
-
-        updatePreferences();
-    }
-
     public FuelLog getEntry(String selection, String[] selectionArgs) {
-        ArrayList<FuelLog> fuelLogArrayList = getEntries(selection, selectionArgs);
+        ArrayList<FuelLog> fuelLogArrayList = getAllEntries(selection, selectionArgs);
 
         if(fuelLogArrayList.size() == 1) {
             return fuelLogArrayList.get(0);
@@ -71,7 +63,7 @@ public class DataAccessObject {
         }
     }
 
-    public ArrayList<FuelLog> getEntries(String nullableSelection, String[] nullableSelectionArgs) {
+    public ArrayList<FuelLog> getAllEntries(String nullableSelection, String[] nullableSelectionArgs) {
         ArrayList<FuelLog> fuelLogArrayList = new ArrayList<>();
         Cursor cursor = db.query(
                 TABLE_NAME,
@@ -103,19 +95,40 @@ public class DataAccessObject {
         return fuelLogArrayList;
     }
 
+    public int deleteEntry(int idOrAll) {
+        String selection;
+
+        if(idOrAll == DEL_ALL) {
+            selection = "1";
+        } else {
+            selection = KEY_ID + " = " + idOrAll;
+        }
+        int delCount = db.delete(
+                TABLE_NAME,
+                selection,
+                null
+        );
+
+        updatePreferences();
+
+        return delCount;
+    }
+
+    public int deleteAllEntries() {
+        return deleteEntry(DEL_ALL);
+    }
+
     private void updatePreferences() {
         String selection = ODOM_VAL + " = (SELECT MAX(" + ODOM_VAL + ") FROM " + TABLE_NAME + ")";
 
-
         FuelLog entry = this.getEntry(selection, null);
 
+        SharedPreferences.Editor editor = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit();
         if(entry != null) {
-            SharedPreferences.Editor editor = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit();
             editor.putInt(Constants.MIN_MILEAGE_KEY, entry.getCurrentOdomVal());
-
-            editor.apply();
         } else {
-            Toast.makeText(context, "Something went wrong with saving your prefs", Toast.LENGTH_SHORT).show();
+            editor.putInt(Constants.MIN_MILEAGE_KEY, 0);
         }
+        editor.apply();
     }
 }

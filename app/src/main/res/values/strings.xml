@@ -21,4 +21,8 @@
     <string name="required_asterisk">* indicates required field</string>
     <string name="del_all">Delete All</string>
     <string name="partial_fill">Partial Fill</string>
+    <string name="del_all_title">Delete All Entries</string>
+    <string name="del_msg">Delete?</string>
+    <string name="del_pos_btn">Delete</string>
+    <string name="del_dismiss_btn">Dismiss</string>
 </resources>

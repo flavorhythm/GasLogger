@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +56,6 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
 	private Button submit, dismiss;
     private TextInputLayout odomWrapper, gasWrapper;
 
-    private DataAccessObject dataAO;
-
     public static DataEntryDialogFragment newInstance() {
         return new DataEntryDialogFragment();
     }
@@ -63,6 +63,9 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        Log.v("LifeCycle", "onCreateView Callback S");
+
         customLayout = inflater.inflate(R.layout.new_entry_dialog, container, false);
         customLayout.requestFocus();
 
@@ -84,7 +87,21 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
 		int width = getResources().getDisplayMetrics().widthPixels - 350;
 		customLayout.setMinimumWidth(width);
 
+        Log.v("LifeCycle", "onCreateView Callback e");
         return customLayout;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        submit.setOnClickListener(null);
+        dismiss.setOnClickListener(null);
+
+        odomVal.addTextChangedListener(null);
+        gasVal.addTextChangedListener(null);
+
+        getActivity().getSupportFragmentManager().popBackStack();
     }
 
     @Override
@@ -118,17 +135,15 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
 					fuelLog.setPartialFill(partialFillCheck.isChecked());
 //					Log.v("partial in DataEntryDialogFragment", String.valueOf(partialFillCheck.isChecked()));
 
-                    dataAO = ((ApplicationDatabase)getActivity().getApplication()).mDataAO;
+                    DataAccessObject dataAO = ((ApplicationDatabase)getActivity().getApplication()).mDataAO;
                     dataAO.addEntry(fuelLog);
 
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putInt(Constants.MIN_MILEAGE_KEY, Integer.parseInt(odomVal.getText().toString()));
                     editor.apply();
                 }
-			case R.id.alrt_btn_dismiss:
+            case R.id.alrt_btn_dismiss:
                 getDialog().dismiss();
-
-                getActivity().getSupportFragmentManager().popBackStack();
 				break;
 			default:
 				Toast.makeText(getContext(), "Something went wrong with the buttons", Toast.LENGTH_SHORT).show();

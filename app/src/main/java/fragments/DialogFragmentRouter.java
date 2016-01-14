@@ -5,13 +5,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 /**
  * Created by zyuki on 1/12/2016.
  */
 public final class DialogFragmentRouter {
-    public static final int ALL_ID = -1;
-
     private DialogFragmentRouter() {}
 
     public static void instantiateDataEntryDF(Activity activity) {
@@ -28,8 +27,9 @@ public final class DialogFragmentRouter {
         deleteItemsDF.show(fTransaction, "dialog");
     }
 
-    private static FragmentTransaction clearFragments(Activity activity) {
-        FragmentManager fManager = ((FragmentActivity)activity).getSupportFragmentManager();
+    public static FragmentTransaction clearFragments(Activity activity) {
+        final FragmentManager fManager = ((FragmentActivity)activity).getSupportFragmentManager();
+
         FragmentTransaction fTransaction = fManager.beginTransaction();
 
         Fragment previousFragment = fManager.findFragmentByTag("dialog");

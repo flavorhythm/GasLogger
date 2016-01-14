@@ -20,7 +20,7 @@ public final class MpgCalculator {
     public static String calculate(Context context) {
         //Sets up DB variable and puts all entries into arraylist fuelLogArrayList
         DataAccessObject dataAO = ((ApplicationDatabase)context).mDataAO;
-        ArrayList<FuelLog> fuelLogArrayList = dataAO.getEntries(null, null);
+        ArrayList<FuelLog> fuelLogArrayList = dataAO.getAllEntries(null, null);
 
         //There are only three possible outcomes of this switch. Negative numbers are irrelevant since user cannot input a negative value.
         switch(fuelLogArrayList.size()) {

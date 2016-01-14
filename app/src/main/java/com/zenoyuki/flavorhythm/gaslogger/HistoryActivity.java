@@ -11,10 +11,11 @@ import data.DataAccessObject;
 import data.DataAdapter;
 import model.FuelLog;
 import fragments.DialogFragmentRouter;
+import util.Constants;
 
 public class HistoryActivity extends AppCompatActivity {
-    private ArrayList<FuelLog> fuelLogArrayList = new ArrayList<>();
     private ListView listView;
+    private int listCount = 0;
 
     private DataAccessObject dataAO;
 
@@ -28,7 +29,7 @@ public class HistoryActivity extends AppCompatActivity {
         listView = (ListView)findViewById(R.id.LV_history);
         listView.setEmptyView(findViewById(R.id.empty_txt_emptyListText));
 
-        refreshData();
+        listCount = refreshData();
     }
 
     @Override
@@ -47,7 +48,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         switch(id) {
             case R.id.MI_del_all:
-                DialogFragmentRouter.instantiateDeleteItemsDF(HistoryActivity.this, DialogFragmentRouter.ALL_ID);
+                DialogFragmentRouter.instantiateDeleteItemsDF(HistoryActivity.this, listCount > 0 ? Constants.ALL_ID : Constants.NO_ENTRIES);
                 break;
             default:
                 break;
@@ -60,15 +61,17 @@ public class HistoryActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        refreshData();
+        listCount = refreshData();
     }
 
-    private void refreshData() {
+    private int refreshData() {
+        ArrayList<FuelLog> fuelLogArrayList = new ArrayList<>();
         fuelLogArrayList.clear();
+
         DataAdapter dataAdapter = new DataAdapter(HistoryActivity.this, R.layout.history_row, fuelLogArrayList);
         listView.setAdapter(dataAdapter);
 
-        ArrayList<FuelLog> logsFromDB = dataAO.getEntries(null, null);
+        ArrayList<FuelLog> logsFromDB = dataAO.getAllEntries(null, null);
         for(int i = 0; i < logsFromDB.size(); i++) {
             FuelLog entry = new FuelLog();
 
@@ -81,5 +84,7 @@ public class HistoryActivity extends AppCompatActivity {
             fuelLogArrayList.add(entry);
             dataAdapter.notifyDataSetChanged();
         }
+
+        return logsFromDB.size();
     }
 }
