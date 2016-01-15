@@ -1,8 +1,10 @@
 package fragments;
 
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,10 +33,9 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
     private TextView alertTitle;
     private Button delete;
 
-    private static Long pressDownEventTime = 0l;
-    private static Long releaseEventTime = 0l;
-
     DataAccessObject dataAO;
+
+    private boolean timeReached;
 
     public static DeleteItemsDialogFragment newInstance(int entryID) {
         DeleteItemsDialogFragment dialogFragment = new DeleteItemsDialogFragment();
@@ -93,24 +94,22 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
             delete.setAlpha(1.0f);
         }
 
-        final Timer timer = new Timer();
         delete.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        timer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                dataAO.deleteAllEntries();
-                            }
-                        }, 3000l);
-                        return true;
+                        PressTimer pressTimer = new PressTimer();
+                        pressTimer.execute();
+                        Log.d("event", "pressedDown & " + String.valueOf(timeReached));
+                        return false;
                     case MotionEvent.ACTION_UP:
-                        timer.cancel();
-                        timer.purge();
-
-                        return true;
+                        if(timeReached) {
+                            dataAO.deleteAllEntries();
+                            return true;
+                        }
+                        Log.d("event", "pressedUp & " + String.valueOf(timeReached));
+                        return false;
                 }
                 return false;
             }
@@ -128,5 +127,39 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
         delete.setOnClickListener(this);
 
         return customLayout;
+    }
+
+    private class PressTimer extends AsyncTask<Void, Void, Boolean> implements View.OnTouchListener {
+        private Timer timer;
+        private boolean timeReachedAsync;
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            long pressLen = 3000l;
+            timer = new Timer();
+
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    timeReachedAsync = true;
+                }
+            }, pressLen);
+
+            timer.cancel();
+            timer.purge();
+            return timeReachedAsync;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            timeReached = timeReachedAsync;
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return false;
+        }
     }
 }

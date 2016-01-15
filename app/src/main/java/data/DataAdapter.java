@@ -71,9 +71,7 @@ public class DataAdapter extends ArrayAdapter<FuelLog> {
             viewHolder.delBtn = (ImageButton)row.findViewById(R.id.IB_row_delete);
 
             row.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder)row.getTag();
-        }
+        } else {viewHolder = (ViewHolder)row.getTag();}
 
         FuelLog entry = getItem(position);
 
@@ -99,12 +97,14 @@ public class DataAdapter extends ArrayAdapter<FuelLog> {
 
     private String doubleFormatter(double topupAmount) {
         DecimalFormat df = new DecimalFormat("##.00"); //Formats MPG value
+
         return df.format(topupAmount);
     }
 
     private String dateFormatter(long recordDate) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
         Date date = new Date(recordDate);
+
         return simpleDateFormat.format(date);
     }
 

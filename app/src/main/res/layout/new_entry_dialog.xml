@@ -62,6 +62,7 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:text="@string/required_asterisk"
+				android:textSize="12sp"
 		        android:layout_marginTop="5dp"/>
 		    <LinearLayout android:id="@+id/alrt_LL_btnGroup"
 		        style="?android:buttonBarStyle"
