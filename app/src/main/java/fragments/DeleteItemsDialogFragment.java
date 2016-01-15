@@ -95,6 +95,7 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
         }
 
         delete.setOnTouchListener(new AsyncListener());
+        delete.setText("Hold to Delete");
 
         return customLayout;
     }
@@ -102,7 +103,7 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
     private View delOneDialog() {
         int id = getArguments().getInt(ENTRY_ID_KEY);
         int odomVal = dataAO.getEntry(FillupTable.KEY_ID + " = " + id, null).getCurrentOdomVal();
-        String title = "Fuel log at: " + odomVal + " miles";
+        String title = "Entry at " + odomVal + " miles";
 
         alertTitle.setText(title);
         delete.setOnClickListener(this);
@@ -147,6 +148,7 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
         }
     }
 
+    //TODO: Implement a progress counter of some sort, to tell the user to let go
     private class AsyncPressTimer extends AsyncTask<Void, Void, Boolean> {
         private Timer timer = new Timer();
 

@@ -50,6 +50,7 @@ import model.FuelLog;
  * }
  */
 public class DataEntryDialogFragment extends DialogFragment implements View.OnClickListener {
+    //TODO: Figure out how to make dialog close more smoothly when keyboard is visible
 	private View customLayout;
 	private EditText odomVal, gasVal;
 	private CheckBox partialFillCheck;
