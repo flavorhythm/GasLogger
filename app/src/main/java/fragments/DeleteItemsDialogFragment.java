@@ -35,7 +35,7 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
 
     DataAccessObject dataAO;
 
-    private boolean timeReached;
+    private boolean timeReached = false;
 
     public static DeleteItemsDialogFragment newInstance(int entryID) {
         DeleteItemsDialogFragment dialogFragment = new DeleteItemsDialogFragment();
@@ -94,26 +94,7 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
             delete.setAlpha(1.0f);
         }
 
-        delete.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        PressTimer pressTimer = new PressTimer();
-                        pressTimer.execute();
-                        Log.d("event", "pressedDown & " + String.valueOf(timeReached));
-                        return false;
-                    case MotionEvent.ACTION_UP:
-                        if(timeReached) {
-                            dataAO.deleteAllEntries();
-                            return true;
-                        }
-                        Log.d("event", "pressedUp & " + String.valueOf(timeReached));
-                        return false;
-                }
-                return false;
-            }
-        });
+        delete.setOnTouchListener(new AsyncListener());
 
         return customLayout;
     }
@@ -129,37 +110,69 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
         return customLayout;
     }
 
-    private class PressTimer extends AsyncTask<Void, Void, Boolean> implements View.OnTouchListener {
-        private Timer timer;
-        private boolean timeReachedAsync;
+    private class AsyncListener implements View.OnTouchListener {
+        PressTimer listener;
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch(event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    Log.d("event", "pressedDown & " + String.valueOf(timeReached));
+                    listener = new PressTimer();
+                    listener.execute();
+
+                    return false;
+                case MotionEvent.ACTION_UP:
+                    if(timeReached) {
+                        dataAO.deleteAllEntries();
+                        getDialog().dismiss();
+                        Log.d("event", "pressedUp & " + String.valueOf(timeReached));
+
+                        timerCancel();
+                        return true;
+                    } else {
+                        Log.d("event", "pressedUp & " + String.valueOf(timeReached));
+
+                        timerCancel();
+                        return false;
+                    }
+            }
+            return false;
+        }
+
+        private void timerCancel() {
+            if(listener != null) {
+                listener.timer.cancel();
+                listener.timer.purge();
+            }
+        }
+    }
+
+    private class PressTimer extends AsyncTask<Void, Void, Boolean> {
+        private Timer timer = new Timer();
+
+        private PressTimer() {
+            Log.d("event", "instantiated");
+        }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             long pressLen = 3000l;
-            timer = new Timer();
 
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    timeReachedAsync = true;
+                    timeReached = true;
+                    Log.d("event", "reached " + String.valueOf(timeReached));
                 }
             }, pressLen);
 
-            timer.cancel();
-            timer.purge();
-            return timeReachedAsync;
+            return timeReached;
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-
-            timeReached = timeReachedAsync;
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            return false;
         }
     }
 }
