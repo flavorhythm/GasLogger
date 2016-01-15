@@ -1,10 +1,13 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 import data.DataAccessObject;
@@ -24,9 +27,9 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        dataAO = ((ApplicationDatabase)getApplication()).mDataAO;
+        dataAO = ((ApplicationDatabase) getApplication()).mDataAO;
 
-        listView = (ListView)findViewById(R.id.LV_history);
+        listView = (ListView) findViewById(R.id.LV_history);
         listView.setEmptyView(findViewById(R.id.empty_txt_emptyListText));
 
         listCount = refreshData();
@@ -46,7 +49,7 @@ public class HistoryActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        switch(id) {
+        switch (id) {
             case R.id.MI_del_all:
                 DialogFragmentRouter.instantiateDeleteItemsDF(HistoryActivity.this, listCount > 0 ? Constants.ALL_ID : Constants.NO_ENTRIES);
                 break;
@@ -72,7 +75,7 @@ public class HistoryActivity extends AppCompatActivity {
         listView.setAdapter(dataAdapter);
 
         ArrayList<FuelLog> logsFromDB = dataAO.getAllEntries(null, null);
-        for(int i = 0; i < logsFromDB.size(); i++) {
+        for (int i = 0; i < logsFromDB.size(); i++) {
             FuelLog entry = new FuelLog();
 
             entry.setCurrentOdomVal(logsFromDB.get(i).getCurrentOdomVal());
