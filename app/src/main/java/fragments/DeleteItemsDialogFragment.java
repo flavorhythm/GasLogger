@@ -18,6 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import data.DataAccessObject;
+import data.FillupTable;
 import util.Constants;
 
 /**
@@ -86,7 +87,6 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
     private View delAllDialog() {
         if(getArguments().getInt(ENTRY_ID_KEY) == Constants.NO_ENTRIES) {
             delete.setEnabled(false);
-
             delete.setAlpha(0.6f);
         } else {
             delete.setEnabled(true);
@@ -120,7 +120,10 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
     }
 
     private View delOneDialog() {
-        String title = "Fuel log at: " + getArguments().getInt(ENTRY_ID_KEY) + " miles";
+        int id = getArguments().getInt(ENTRY_ID_KEY);
+        int odomVal = dataAO.getEntry(FillupTable.KEY_ID + " = " + id, null).getCurrentOdomVal();
+        String title = "Fuel log at: " + odomVal + " miles";
+
         alertTitle.setText(title);
         delete.setOnClickListener(this);
 

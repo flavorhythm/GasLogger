@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.zenoyuki.flavorhythm.gaslogger.R;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,11 +79,8 @@ public class DataAdapter extends ArrayAdapter<FuelLog> {
 
         viewHolder.odomHolder.setText(String.valueOf(entry.getCurrentOdomVal()));
 //		viewHolder.gasHolder.setText(String.valueOf(entry.getPartialFill()));
-        viewHolder.gasHolder.setText(String.valueOf(entry.getFuelTopupAmount()));
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-        Date date = new Date(entry.getRecordDate());
-        viewHolder.timestampHolder.setText(simpleDateFormat.format(date));
+        viewHolder.gasHolder.setText(doubleFormatter(entry.getFuelTopupAmount()));
+        viewHolder.timestampHolder.setText(dateFormatter(entry.getRecordDate()));
 
         if(entry.getPartialFill()) {viewHolder.partialIcon.setVisibility(View.VISIBLE);}
         else {viewHolder.partialIcon.setVisibility(View.INVISIBLE);}
@@ -97,6 +95,17 @@ public class DataAdapter extends ArrayAdapter<FuelLog> {
 //        viewHolder.editBtn.setOnClickListener(new View.OnClickListener() {});
 
         return row;
+    }
+
+    private String doubleFormatter(double topupAmount) {
+        DecimalFormat df = new DecimalFormat("##.00"); //Formats MPG value
+        return df.format(topupAmount);
+    }
+
+    private String dateFormatter(long recordDate) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+        Date date = new Date(recordDate);
+        return simpleDateFormat.format(date);
     }
 
     private class ViewHolder {
