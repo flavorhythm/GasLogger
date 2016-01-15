@@ -111,17 +111,17 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
     }
 
     private class AsyncListener implements View.OnTouchListener {
-        PressTimer listener;
+        AsyncPressTimer listener;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch(event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     Log.d("event", "pressedDown & " + String.valueOf(timeReached));
-                    listener = new PressTimer();
+                    listener = new AsyncPressTimer();
                     listener.execute();
 
-                    return false;
+                    return true;
                 case MotionEvent.ACTION_UP:
                     if(timeReached) {
                         dataAO.deleteAllEntries();
@@ -129,13 +129,12 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
                         Log.d("event", "pressedUp & " + String.valueOf(timeReached));
 
                         timerCancel();
-                        return true;
                     } else {
                         Log.d("event", "pressedUp & " + String.valueOf(timeReached));
 
                         timerCancel();
-                        return false;
                     }
+                    return true;
             }
             return false;
         }
@@ -148,10 +147,10 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
         }
     }
 
-    private class PressTimer extends AsyncTask<Void, Void, Boolean> {
+    private class AsyncPressTimer extends AsyncTask<Void, Void, Boolean> {
         private Timer timer = new Timer();
 
-        private PressTimer() {
+        private AsyncPressTimer() {
             Log.d("event", "instantiated");
         }
 

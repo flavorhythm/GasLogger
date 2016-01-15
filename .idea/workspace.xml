@@ -13,7 +13,6 @@
   <component name="ChangeListManager">
     <list default="true" id="19e561ed-44b2-47c1-b517-e4e737a9185f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/fragments/DeleteItemsDialogFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/fragments/DeleteItemsDialogFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="GasLogger.iws" />
@@ -50,14 +49,15 @@
       <file leaf-file-name="DeleteItemsDialogFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/fragments/DeleteItemsDialogFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6329735">
-              <caret line="162" column="25" selection-start-line="162" selection-start-column="25" selection-end-line="162" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.609421">
+              <caret line="147" column="5" selection-start-line="147" selection-start-column="5" selection-end-line="147" selection-end-column="5" />
               <folding>
-                <element signature="e#4858#4859#0" expanded="true" />
-                <element signature="e#4912#4913#0" expanded="true" />
-                <element signature="e#5283#5284#0" expanded="true" />
-                <element signature="e#5414#5415#0" expanded="true" />
-                <element signature="e#5467#5468#0" expanded="true" />
+                <element signature="e#4835#4836#0" expanded="true" />
+                <element signature="e#4889#4890#0" expanded="true" />
+                <element signature="e#5032#5261#0" expanded="true" />
+                <element signature="e#5260#5261#0" expanded="true" />
+                <element signature="e#5391#5392#0" expanded="true" />
+                <element signature="e#5444#5445#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -3029,14 +3029,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/fragments/DeleteItemsDialogFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6329735">
-          <caret line="162" column="25" selection-start-line="162" selection-start-column="25" selection-end-line="162" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.609421">
+          <caret line="147" column="5" selection-start-line="147" selection-start-column="5" selection-end-line="147" selection-end-column="5" />
           <folding>
-            <element signature="e#4858#4859#0" expanded="true" />
-            <element signature="e#4912#4913#0" expanded="true" />
-            <element signature="e#5283#5284#0" expanded="true" />
-            <element signature="e#5414#5415#0" expanded="true" />
-            <element signature="e#5467#5468#0" expanded="true" />
+            <element signature="e#4835#4836#0" expanded="true" />
+            <element signature="e#4889#4890#0" expanded="true" />
+            <element signature="e#5032#5261#0" expanded="true" />
+            <element signature="e#5260#5261#0" expanded="true" />
+            <element signature="e#5391#5392#0" expanded="true" />
+            <element signature="e#5444#5445#0" expanded="true" />
           </folding>
         </state>
       </provider>
