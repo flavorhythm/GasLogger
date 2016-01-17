@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/bg_color"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.zenoyuki.flavorhythm.gaslogger.MainActivity"
     tools:showIn="@layout/activity_main">
@@ -16,7 +17,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/num_placeholder"
-        android:textSize="140sp"
+              android:textColor="@color/text_color"
+        android:fontFamily="sans-serif-thin"
+        android:textScaleX="0.5"
+        android:letterSpacing="-0.1"
+        android:textSize="120sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"/>
 
@@ -24,9 +29,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/avg_mpg_label"
+        android:textColor="@color/text_color"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="18sp"
         android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/TV_display_mpg_value"
-        android:layout_marginTop="-30dp"/>
+        android:layout_marginTop="-20dp"/>
 
 </RelativeLayout>

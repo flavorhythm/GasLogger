@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="text_color">#525252</color>
+    <color name="colorPrimary">#5c6fa7</color>
+    <color name="colorPrimaryDark">#3b468c</color>
+    <color name="colorAccent">#4f7989</color>
+    <color name="text_color">#606060</color>
     <color name="hint_color">#9B9B9B</color>
     <color name="deleteTextBtn">#B30000</color>
+    <color name="bg_color">#bababa</color>
 </resources>

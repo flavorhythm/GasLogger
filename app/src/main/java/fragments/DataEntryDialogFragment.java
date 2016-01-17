@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -94,8 +96,6 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
 
     @Override
     public void onPause() {
-        super.onPause();
-
         submit.setOnClickListener(null);
         dismiss.setOnClickListener(null);
 
@@ -103,6 +103,8 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
         gasVal.addTextChangedListener(null);
 
         getActivity().getSupportFragmentManager().popBackStack();
+
+        super.onPause();
     }
 
     @Override
