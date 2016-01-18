@@ -2,17 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:padding="20dp" android:orientation="vertical"
     android:layout_width="match_parent" android:layout_height="wrap_content">
-    <TextView android:id="@+id/del_txt_delTitle"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/del_all_title"
-        android:layout_marginBottom="10dp"/>
-    <TextView android:id="@+id/del_txt_msg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/del_msg"
-        android:layout_marginTop="5dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView android:id="@+id/del_txt_delTitle"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/del_all_title"
+            android:layout_marginBottom="10dp"/>
+        <TextView android:id="@+id/del_txt_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:visibility="invisible"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <!--<TextView android:id="@+id/del_txt_msg"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/del_msg"-->
+        <!--android:layout_marginTop="5dp"/>-->
     <LinearLayout android:id="@+id/alrt_LL_btnGroup"
         style="?android:buttonBarStyle"
         android:layout_width="match_parent"

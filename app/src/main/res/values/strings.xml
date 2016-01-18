@@ -11,9 +11,7 @@
     <string name="toast_item_saved">Successfully saved!</string>
 
     <string name="blank_error">Cannot be blank</string>
-    <string name="odom_blank_error"><i>Whole numbers</i> only</string>
     <string name="odom_low_value_error">Needs a value greater than</string>
-    <string name="gas_blank_error"><i>Decimal numbers</i> only</string>
     <string name="alrt_dismiss">Dismiss</string>
     <string name="alrt_submit">Submit</string>
     <string name="alrt_title">New Entry</string>
@@ -22,7 +20,18 @@
     <string name="del_all">Delete All</string>
     <string name="partial_fill">Partial Fill</string>
     <string name="del_all_title">Delete All Entries</string>
-    <string name="del_msg">Delete?</string>
     <string name="del_pos_btn">Delete</string>
     <string name="del_dismiss_btn">Dismiss</string>
+    <string name="del_btn_all">Hold to Delete</string>
+    <string name="del_one_title_1_2">Delete Entry at</string>
+    <string name="del_one_title_2_2">Miles</string>
+
+    <!--SNACKBAR STRINGS-->
+    <string name="save_snack_success">Save Successful</string>
+    <string name="save_snack_error">Save Error</string>
+
+    <string name="del_snack_success_1_2">Delete Successful</string>
+    <string name="del_snack_entry_2_2">entry</string>
+    <string name="del_snack_entries_2_2">entries</string>
+    <string name="del_snack_error">Delete Error</string>
 </resources>

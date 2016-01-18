@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class DataAccessObject {
         db.close();
     }
 
-    public void addEntry(FuelLog entry) {
+    public long addEntry(FuelLog entry) {
         int partialFillInt = entry.getPartialFill() ? 1 : 0;
 
         ContentValues values = new ContentValues();
@@ -51,6 +50,8 @@ public class DataAccessObject {
         long entryID = db.insert(TABLE_NAME, null, values);
 
         updatePreferences();
+
+        return entryID;
     }
 
     public FuelLog getEntry(String selection, String[] selectionArgs) {
@@ -95,14 +96,10 @@ public class DataAccessObject {
         return fuelLogArrayList;
     }
 
-    public int deleteEntry(int idOrAll) {
-        String selection;
+    public int deleteEntry(int id) {
+        final String SELECT_ALL = "1";
+        String selection = (id == DEL_ALL) ? SELECT_ALL : KEY_ID + " = " + id;
 
-        if(idOrAll == DEL_ALL) {
-            selection = "1";
-        } else {
-            selection = KEY_ID + " = " + idOrAll;
-        }
         int delCount = db.delete(
                 TABLE_NAME,
                 selection,

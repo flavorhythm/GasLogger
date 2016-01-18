@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -15,12 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.zenoyuki.flavorhythm.gaslogger.ApplicationDatabase;
 import com.zenoyuki.flavorhythm.gaslogger.R;
@@ -52,7 +49,6 @@ import model.FuelLog;
  * }
  */
 public class DataEntryDialogFragment extends DialogFragment implements View.OnClickListener {
-    //TODO: Figure out how to make dialog close more smoothly when keyboard is visible
 	private View customLayout;
 	private EditText odomVal, gasVal;
 	private CheckBox partialFillCheck;
@@ -136,22 +132,27 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
                     fuelLog.setCurrentOdomVal(Integer.parseInt(odomVal.getText().toString()));
                     fuelLog.setFuelTopupAmount(Float.parseFloat(gasVal.getText().toString()));
 					fuelLog.setPartialFill(partialFillCheck.isChecked());
-//					Log.v("partial in DataEntryDialogFragment", String.valueOf(partialFillCheck.isChecked()));
 
                     DataAccessObject dataAO = ((ApplicationDatabase)getActivity().getApplication()).mDataAO;
-                    dataAO.addEntry(fuelLog);
+                    long entryID = dataAO.addEntry(fuelLog);
 
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt(Constants.MIN_MILEAGE_KEY, Integer.parseInt(odomVal.getText().toString()));
-                    editor.apply();
+                    showAddSnackbar(entryID);
                 }
             case R.id.alrt_btn_dismiss:
                 getDialog().dismiss();
 				break;
-			default:
-				Toast.makeText(getContext(), "Something went wrong with the buttons", Toast.LENGTH_SHORT).show();
-				break;
 		}
+    }
+
+    private void showAddSnackbar(long entryID) {
+        final long ERROR = -1l;
+        View root = getActivity().findViewById(R.id.main_root);
+
+        if(entryID != ERROR) {
+            Snackbar.make(root, getResources().getString(R.string.save_snack_success), Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(root, getResources().getString(R.string.save_snack_error), Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private void errorDisplay(TextInputLayout wrapper, String errorString) {
@@ -193,9 +194,6 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
                     break;
                 case R.id.alrt_edt_gas:
                     gasWrapper.setErrorEnabled(false);
-                    break;
-                default:
-                    Toast.makeText(getContext(), "Something went wrong with the listener", Toast.LENGTH_SHORT).show();
                     break;
             }
         }

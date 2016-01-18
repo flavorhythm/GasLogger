@@ -1,6 +1,7 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
 import android.app.Application;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
@@ -14,6 +15,7 @@ import data.DataAccessObject;
 public class ApplicationDatabase extends Application {
 
     public DataAccessObject mDataAO;
+    public Snackbar mSnackbar;
 
     @Override
     public void onCreate() {

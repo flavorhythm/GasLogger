@@ -1,12 +1,10 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,17 +15,28 @@ import fragments.DialogFragmentRouter;
 import util.Constants;
 
 public class HistoryActivity extends AppCompatActivity {
-    private ListView listView;
-    private int listCount = 0;
 
+    /***********************************************************************************************
+     * GLOBAL VARIABLES
+     **********************************************************************************************/
+    /**PRIVATE VARIABLES**/
+    // Main listview that displays all available entries from the DB
+    private ListView listView;
+    // Counter to distinguish between "no entries available" and "at least one entry available"
+    private int listCount = 0;
+    // Instantiates the DataAccess Object globally so all the methods have access to it
     private DataAccessObject dataAO;
 
+    /***********************************************************************************************
+     * OVERRIDE METHODS
+     **********************************************************************************************/
+    /**Finds views, sets up dataAO and refreshes the list once**/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        dataAO = ((ApplicationDatabase) getApplication()).mDataAO;
+        dataAO = ((ApplicationDatabase)getApplication()).mDataAO;
 
         listView = (ListView) findViewById(R.id.LV_history);
         listView.setEmptyView(findViewById(R.id.empty_txt_emptyListText));
@@ -35,15 +44,19 @@ public class HistoryActivity extends AppCompatActivity {
         listCount = refreshData();
     }
 
+    /**Creates the menu from layout >> menu_history.xml**/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_history, menu);
         return true;
     }
 
+    /**Routes the selected item menu to its correct corresponding action**/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -60,13 +73,20 @@ public class HistoryActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**Updates the list every time focus changes to this activity**/
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        listCount = refreshData();
+        if (hasFocus) {
+            listCount = refreshData();
+        }
     }
 
+    /***********************************************************************************************
+     * PRIVATE METHODS
+     **********************************************************************************************/
+    /**Updates the items displayed on the list**/
     private int refreshData() {
         ArrayList<FuelLog> fuelLogArrayList = new ArrayList<>();
         fuelLogArrayList.clear();

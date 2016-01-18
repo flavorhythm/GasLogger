@@ -15,6 +15,8 @@ import model.FuelLog;
  * Created by zyuki on 1/8/2016.
  */
 public final class MpgCalculator {
+    private static final String NULL_VALUE = "- -";
+
     private MpgCalculator() {}
 
     public static String calculate(Context context) {
@@ -29,7 +31,7 @@ public final class MpgCalculator {
             case 0: clearPreferences(context);
             //If there are no entries (from the case above with no "break") or just one entry in the DB, returns ZERO.
             //This is done because there aren't enough entries to calculate an MPG value from.
-            case 1: return "0";
+            case 1: return NULL_VALUE;
             //Returns an actual MPG calculation if there is more than one entry.
             default: return mainCalculator(fuelLogArrayList);
         }
