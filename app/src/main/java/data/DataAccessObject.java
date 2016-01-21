@@ -84,8 +84,6 @@ public class DataAccessObject {
                 fuelLog.setCurrentOdomVal(cursor.getInt(cursor.getColumnIndex(ODOM_VAL))); //Sets fuelLog object's currentOdomVal variable to data within database
                 fuelLog.setFuelTopupAmount(cursor.getDouble(cursor.getColumnIndex(FUEL_AMOUNT))); //Sets fuelLog object's fuelTopupAmount variable to data within database
                 fuelLog.setPartialFill(cursor.getInt(cursor.getColumnIndex(PARTIAL_FILL)) == 1);
-//				Log.v("partial in getAllEntries, DatabaseHandler", String.valueOf(cursor.getInt(cursor.getColumnIndex(PARTIAL_FILL)) == 1));
-
                 fuelLog.setRecordDate(cursor.getLong(cursor.getColumnIndex(RECORD_DATE)));
 
                 fuelLogArrayList.add(fuelLog); //Adds the entire fuelLog object into the fuelLogList
@@ -126,6 +124,7 @@ public class DataAccessObject {
         } else {
             editor.putInt(Constants.MIN_MILEAGE_KEY, 0);
         }
+
         editor.apply();
     }
 }

@@ -24,24 +24,11 @@ public final class MpgCalculator {
         DataAccessObject dataAO = ((ApplicationDatabase)context).mDataAO;
         ArrayList<FuelLog> fuelLogArrayList = dataAO.getAllEntries(null, null);
 
-        //There are only three possible outcomes of this switch. Negative numbers are irrelevant since user cannot input a negative value.
-        switch(fuelLogArrayList.size()) {
-            //If there no entries in the DB, the preferences is updated to the value ZERO.
-            //This is done so that if the DB is cleared, the user can input any odometer value.
-            case 0: clearPreferences(context);
-            //If there are no entries (from the case above with no "break") or just one entry in the DB, returns ZERO.
-            //This is done because there aren't enough entries to calculate an MPG value from.
-            case 1: return NULL_VALUE;
-            //Returns an actual MPG calculation if there is more than one entry.
-            default: return mainCalculator(fuelLogArrayList);
+        if(fuelLogArrayList.size() <= 1) {
+            return NULL_VALUE;
         }
-    }
 
-    private static void clearPreferences(Context context) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit();
-        editor.putInt(Constants.MIN_MILEAGE_KEY, 0);
-
-        editor.apply();
+        return mainCalculator(fuelLogArrayList);
     }
 
     private static String mainCalculator(ArrayList<FuelLog> fuelLogArrayList) {

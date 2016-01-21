@@ -7,9 +7,9 @@ public class FuelLog {
 
     //Values that are stored into DB
     private int itemID;                 //Unique ID for every entry. Saved into DB column "_id"
-    private int currentOdomVal;       //
-    private double fuelTopupAmount;      //
-    private long recordDate;          //
+    private int currentOdomVal;         //
+    private double fuelTopupAmount;     //
+    private long recordDate;            //
     private boolean partialFill;
 
     //Setters

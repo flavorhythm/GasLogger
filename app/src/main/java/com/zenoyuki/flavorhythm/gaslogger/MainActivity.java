@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         // The Super call of this method
         super.onWindowFocusChanged(hasFocus);
 
-        // If this screen has focus, then set the display to the calculated MPG value
+        // Whenever this activity has focus, set the display to the calculated MPG value
         if(hasFocus) {
             mpgText.setText(MpgCalculator.calculate(getApplicationContext()));
         }

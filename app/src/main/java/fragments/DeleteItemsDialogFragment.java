@@ -125,7 +125,7 @@ public class DeleteItemsDialogFragment extends DialogFragment implements View.On
     }
 
     private void showDeleteSnackbar(int delCount) {
-        final long ERROR = 0;
+        final long ERROR = 0l;
         View root = getActivity().findViewById(R.id.history_root);
 
         if(delCount != ERROR) {

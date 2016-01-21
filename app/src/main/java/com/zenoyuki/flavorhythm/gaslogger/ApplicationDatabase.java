@@ -1,9 +1,6 @@
 package com.zenoyuki.flavorhythm.gaslogger;
 
 import android.app.Application;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 
 import java.sql.SQLException;
 
@@ -14,26 +11,55 @@ import data.DataAccessObject;
  */
 public class ApplicationDatabase extends Application {
 
+    /***********************************************************************************************
+     * GLOBAL VARIABLES
+     **********************************************************************************************/
+    /**PUBLIC VARIABLES**/
+    // Public DataAccessObject so the entire application has access to the DB
     public DataAccessObject mDataAO;
-    public Snackbar mSnackbar;
 
+    /***********************************************************************************************
+     * OVERRIDE METHODS
+     **********************************************************************************************/
+    /**Sets up the DataAccessObject whenever the Application is initialized**/
     @Override
     public void onCreate() {
+
+        // Instantiates a new DataAccessObject
+        // Param1: this application's context
         mDataAO = new DataAccessObject(getApplicationContext());
+
+        // Opens DB
         openDatabaseAndTry();
+
+        // This method's Super call
         super.onCreate();
     }
 
+    /**Closes the DataAccessObject whenever the Application is terminated**/
     @Override
     public void onTerminate() {
+
+        // Closes DB
         mDataAO.close();
+
+        // This method's Super call
         super.onTerminate();
     }
 
+    /***********************************************************************************************
+     * PRIVATE METHODS
+     **********************************************************************************************/
+    /**Encapsulates Database Open in a try-catch**/
     private void openDatabaseAndTry() {
+
+        // Try-catch block
         try {
+            // Opens DB
             mDataAO.open();
+        // Catches an SQLException
         } catch(SQLException e) {
+            // Prints the stack trace of the exception
             e.printStackTrace();
         }
     }
