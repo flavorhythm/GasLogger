@@ -4,7 +4,7 @@ package model;
  * Created by zyuki on 11/30/2015.
  */
 public class FuelLog {
-
+    //TODO: Add cost variable and make necessary changes to DB objects
     //Values that are stored into DB
     private int itemID;                 //Unique ID for every entry. Saved into DB column "_id"
     private int currentOdomVal;         //

@@ -8,8 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
-import util.Constants;
+import util.Constant;
 import model.FuelLog;
 
 import static data.FillupTable.*;
@@ -45,7 +46,7 @@ public class DataAccessObject {
         values.put(ODOM_VAL, entry.getCurrentOdomVal());
         values.put(FUEL_AMOUNT, entry.getFuelTopupAmount());
         values.put(PARTIAL_FILL, partialFillInt);
-        values.put(RECORD_DATE, System.currentTimeMillis());
+        values.put(RECORD_DATE, entry.getRecordDate());
 
         long entryID = db.insert(TABLE_NAME, null, values);
 
@@ -55,7 +56,7 @@ public class DataAccessObject {
     }
 
     public FuelLog getEntry(String selection, String[] selectionArgs) {
-        ArrayList<FuelLog> fuelLogArrayList = getAllEntries(selection, selectionArgs);
+        List<FuelLog> fuelLogArrayList = getAllEntries(selection, selectionArgs);
 
         if(fuelLogArrayList.size() == 1) {
             return fuelLogArrayList.get(0);
@@ -64,8 +65,8 @@ public class DataAccessObject {
         }
     }
 
-    public ArrayList<FuelLog> getAllEntries(String nullableSelection, String[] nullableSelectionArgs) {
-        ArrayList<FuelLog> fuelLogArrayList = new ArrayList<>();
+    public List<FuelLog> getAllEntries(String nullableSelection, String[] nullableSelectionArgs) {
+        List<FuelLog> fuelLogArrayList = new ArrayList<>();
         Cursor cursor = db.query(
                 TABLE_NAME,
                 ALL_COLUMNS,
@@ -118,11 +119,11 @@ public class DataAccessObject {
 
         FuelLog entry = this.getEntry(selection, null);
 
-        SharedPreferences.Editor editor = context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = context.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE).edit();
         if(entry != null) {
-            editor.putInt(Constants.MIN_MILEAGE_KEY, entry.getCurrentOdomVal());
+            editor.putInt(Constant.MIN_MILEAGE_KEY, entry.getCurrentOdomVal());
         } else {
-            editor.putInt(Constants.MIN_MILEAGE_KEY, 0);
+            editor.putInt(Constant.MIN_MILEAGE_KEY, 0);
         }
 
         editor.apply();

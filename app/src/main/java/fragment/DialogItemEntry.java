@@ -1,5 +1,6 @@
-package fragments;
+package fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,57 +19,103 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.zenoyuki.flavorhythm.gaslogger.ApplicationDatabase;
 import com.zenoyuki.flavorhythm.gaslogger.R;
 
-import util.Constants;
+import data.FillupTable;
+import util.Constant;
 import data.DataAccessObject;
 import model.FuelLog;
 
 /**
  * Created by zyuki on 12/23/2015.
  * Reason why you cannot do the following:
- * public class DataEntryDialogFragment extends DialogFragment implements View.OnClickListener {
+ * public class DialogItemEntry extends DialogFragment implements View.OnClickListener {
  *     private static final String MIN_MILEAGE_KEY = "min_mileage";
  *     private String myVar;
- * public static DataEntryDialogFragment newInstance(int minMileage, String myVar) {
+ * public static DialogItemEntry newInstance(int minMileage, String myVar) {
  *     this.myVar = myVar;
  * This is because the instantiation (I believe it's an instance to save memory, instead of creating an object via a constructor)
  * needs to be declared static (can be declared just public. Maybe this would create a crash? must test) and static methods cannot pull from
  * "this."
  *
  * Example:
- * public static DataEntryDialogFragment newInstance() {
- *       DataEntryDialogFragment fragment = new DataEntryDialogFragment();
+ * public static DialogItemEntry newInstance() {
+ *       DialogItemEntry fragment = new DialogItemEntry();
  *        Bundle args = new Bundle();
  *
  *        args.putInt(MIN_MILEAGE_KEY, minMileage);
  *        fragment.setArguments(args);
- *        return new DataEntryDialogFragment();
+ *        return new DialogItemEntry();
  * }
  */
-public class DataEntryDialogFragment extends DialogFragment implements View.OnClickListener {
+public class DialogItemEntry extends DialogFragment implements View.OnClickListener {
+    private static final String ENTRY_ID_KEY = "entryId";
+
 	private View customLayout;
+    private TextView idVal;
 	private EditText odomVal, gasVal;
 	private CheckBox partialFillCheck;
 	private Button submit, dismiss;
     private TextInputLayout odomWrapper, gasWrapper;
 
-    public static DataEntryDialogFragment newInstance() {
-        return new DataEntryDialogFragment();
+    private Callback callback;
+
+    private FuelLog fuelLog;
+    private int entryId;
+
+    public static DialogItemEntry newInstance(int entryId) {
+        DialogItemEntry entryDialog = new DialogItemEntry();
+        Bundle args = new Bundle();
+        args.putInt(ENTRY_ID_KEY, entryId);
+
+        entryDialog.setArguments(args);
+        return entryDialog;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        callback = (Callback)activity;
+
+        entryId = getArguments().getInt(ENTRY_ID_KEY);
+
+        if(entryId != Constant.NEW_ITEM) {
+            findData(entryId);
+        }
+    }
+
+    private void populateFields() {
+        odomVal.setText(String.valueOf(fuelLog.getCurrentOdomVal()));
+        gasVal.setText(String.valueOf(fuelLog.getFuelTopupAmount()));
+        partialFillCheck.setChecked(fuelLog.getPartialFill());
+
+        String idString = "(" + String.valueOf(entryId) + ")";
+        idVal.setText(idString);
+    }
+
+    private void findData(int entryId) {
+        DataAccessObject dataAccess = ((ApplicationDatabase)getActivity().getApplication()).dataAccess;
+        String selection = FillupTable.KEY_ID + " =?";
+        String[] selectionArgs = new String[] {String.valueOf(entryId)};
+
+        fuelLog = dataAccess.getEntry(selection, selectionArgs);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        Log.v("LifeCycle", "onCreateView Callback S");
-
-        customLayout = inflater.inflate(R.layout.new_entry_dialog, container, false);
+        customLayout = inflater.inflate(R.layout.dialog_new_item, container, false);
         customLayout.requestFocus();
 
 		findViewsByID();
+
+        if(entryId != Constant.NEW_ITEM) {
+            populateFields();
+        }
 
         odomWrapper.setHint(getResources().getString(R.string.odom_hint));
         gasWrapper.setHint(getResources().getString(R.string.gas_hint));
@@ -86,21 +133,7 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
 		int width = getResources().getDisplayMetrics().widthPixels - 350;
 		customLayout.setMinimumWidth(width);
 
-        Log.v("LifeCycle", "onCreateView Callback e");
         return customLayout;
-    }
-
-    @Override
-    public void onPause() {
-        submit.setOnClickListener(null);
-        dismiss.setOnClickListener(null);
-
-        odomVal.addTextChangedListener(null);
-        gasVal.addTextChangedListener(null);
-
-        getActivity().getSupportFragmentManager().popBackStack();
-
-        super.onPause();
     }
 
     @Override
@@ -120,8 +153,8 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
 
                 int odomNewVal = Integer.parseInt(odomVal.getText().toString());
 
-                SharedPreferences preferences = getContext().getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);
-                int minOdom = preferences.getInt(Constants.MIN_MILEAGE_KEY, 0);
+                SharedPreferences preferences = getContext().getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
+                int minOdom = preferences.getInt(Constant.MIN_MILEAGE_KEY, 0);
 
                 if(minOdom >= odomNewVal) {
                     errorDisplay(odomWrapper, getResources().getString(R.string.odom_low_value_error) + " " + String.valueOf(minOdom));
@@ -129,12 +162,18 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
                 } else {
                     FuelLog fuelLog = new FuelLog();
 
+                    //TODO: need to allow dialog to save when editing (cannot be below highest odom reading)
                     fuelLog.setCurrentOdomVal(Integer.parseInt(odomVal.getText().toString()));
                     fuelLog.setFuelTopupAmount(Float.parseFloat(gasVal.getText().toString()));
 					fuelLog.setPartialFill(partialFillCheck.isChecked());
+                    fuelLog.setRecordDate(System.currentTimeMillis());
 
-                    DataAccessObject dataAO = ((ApplicationDatabase)getActivity().getApplication()).mDataAO;
-                    long entryID = dataAO.addEntry(fuelLog);
+                    DataAccessObject dataAccess = ((ApplicationDatabase)getActivity().getApplication()).dataAccess;
+                    int entryID = Long.valueOf(dataAccess.addEntry(fuelLog)).intValue();
+
+                    fuelLog.setItemID(entryID);
+
+                    callback.addLog(fuelLog);
 
                     showAddSnackbar(entryID);
                 }
@@ -144,8 +183,8 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
 		}
     }
 
-    private void showAddSnackbar(long entryID) {
-        final long ERROR = -1l;
+    private void showAddSnackbar(int entryID) {
+        final int ERROR = -1;
         View root = getActivity().findViewById(R.id.main_root);
 
         if(entryID != ERROR) {
@@ -162,6 +201,7 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
     }
 
     private void findViewsByID() {
+        idVal = (TextView)customLayout.findViewById(R.id.dialogNew_text_id);
 		odomVal = (EditText)customLayout.findViewById(R.id.alrt_edt_odom);
 		gasVal = (EditText)customLayout.findViewById(R.id.alrt_edt_gas);
 
@@ -173,6 +213,10 @@ public class DataEntryDialogFragment extends DialogFragment implements View.OnCl
 		submit = (Button)customLayout.findViewById(R.id.alrt_btn_submit);
 		dismiss = (Button)customLayout.findViewById(R.id.alrt_btn_dismiss);
 	}
+
+    public interface Callback {
+        void addLog(FuelLog fuelLog);
+    }
 
     private class CustomTextWatcher implements TextWatcher {
         private int viewID;

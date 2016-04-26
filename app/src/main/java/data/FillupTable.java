@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
  * Created by ZYuki on 1/11/2016.
  */
 public class FillupTable {
+    private FillupTable() {}
+
     public static final String TABLE_NAME = "fueling_tbl";
 
     public static final String KEY_ID = "_id";
@@ -34,7 +36,7 @@ public class FillupTable {
     }
 
     public static void onUpgrade(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS " + CREATE_FUEL_LOG_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
 }

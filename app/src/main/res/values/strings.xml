@@ -34,4 +34,8 @@
     <string name="del_snack_entry_2_2">entry</string>
     <string name="del_snack_entries_2_2">entries</string>
     <string name="del_snack_error">Delete Error</string>
+    <string name="frag_chart_title">Chart</string>
+    <string name="frag_list_title">List</string>
+    <string name="avg_label">Average</string>
+    <string name="mpg_label">MPG</string>
 </resources>

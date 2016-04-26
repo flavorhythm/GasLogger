@@ -8,11 +8,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import adapter.ListAdapter;
 import data.DataAccessObject;
-import data.DataAdapter;
 import model.FuelLog;
-import fragments.DialogFragmentRouter;
-import util.Constants;
+import fragment.DialogRouter;
+import util.Constant;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -39,7 +39,7 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         // Points to the DataAccessObject in the ApplicationDatabase
-        dataAO = ((ApplicationDatabase)getApplication()).mDataAO;
+        dataAO = ((ApplicationDatabase)getApplication()).dataAccess;
 
         // Finds the ListView
         entryList = (ListView)findViewById(R.id.LV_history);
@@ -48,7 +48,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         // Uses method refreshData to determine how many entries are currently saved in the DB
         // and to refresh the list
-        listCount = refreshData();
+//        listCount = refreshData();
     }
 
     /**Creates the menu from layout >> menu_history.xml**/
@@ -74,12 +74,12 @@ public class HistoryActivity extends AppCompatActivity {
             case R.id.MI_del_all:
 
                 // Determines if the list is empty or not
-                int allOrNone = listCount > 0 ? Constants.ALL_ID : Constants.NO_ENTRIES;
+                int allOrNone = listCount > 0 ? Constant.ALL_ID : Constant.NO_ENTRIES;
 
                 // When the "delete" item is clicked, a dialog fragment opens
                 // Param1: this activity
                 // Param2: integer value dependent on the number of entries in the DB
-                DialogFragmentRouter.instantiateDeleteItemsDF(HistoryActivity.this, allOrNone);
+//                DialogRouter.showDeleteDialog(HistoryActivity.this, allOrNone);
                 break;
         }
 
@@ -98,53 +98,53 @@ public class HistoryActivity extends AppCompatActivity {
         if (hasFocus) {
             // Use method refreshData to determine how many entries are currently saved in the DB
             // and to refresh the list
-            listCount = refreshData();
+//            listCount = refreshData();
         }
     }
 
-    /***********************************************************************************************
-     * PRIVATE METHODS
-     **********************************************************************************************/
-    /**Updates the items displayed on the entryList**/
-    private int refreshData() {
-
-        // Instantiates a new ArrayList that is tied to the DataAdapter
-        ArrayList<FuelLog> fuelLogArrayList = new ArrayList<>();
-
-        // Instantiates a new DataAdapter
-        DataAdapter dataAdapter = new DataAdapter(HistoryActivity.this, R.layout.history_row, fuelLogArrayList);
-        // Sets the adapter to the list
-        entryList.setAdapter(dataAdapter);
-
-        // Pulls all entries from the DB into an ArrayList
-        // Param1: selection. Null for all entries
-        // Param2: selection arguments. Null for all entries
-        ArrayList<FuelLog> logsFromDB = dataAO.getAllEntries(null, null);
-
-        // For ever entry in the DB...
-        for (int i = 0; i < logsFromDB.size(); i++) {
-
-            // Instantiates a new temp FuelLog object to pass data from the DB arraylist to the dataAdapter arraylist
-            FuelLog entry = new FuelLog();
-
-            // Copies odom value from DB to the list
-            entry.setCurrentOdomVal(logsFromDB.get(i).getCurrentOdomVal());
-            // Copies fillup amount from DB to the list
-            entry.setFuelTopupAmount(logsFromDB.get(i).getFuelTopupAmount());
-            // Copies record date from DB to the list
-            entry.setRecordDate(logsFromDB.get(i).getRecordDate());
-            // Copies partial fill data from DB to the list
-            entry.setPartialFill(logsFromDB.get(i).getPartialFill());
-            // Copies id from DB to the list
-            entry.setItemID(logsFromDB.get(i).getItemID());
-
-            // Adds the temp FuelLog to the adapter-attached arraylist
-            fuelLogArrayList.add(entry);
-            // Notifies the adapter the dataset has changed
-            dataAdapter.notifyDataSetChanged();
-        }
-
-        // Returns the number of entries within the DB
-        return logsFromDB.size();
-    }
+//    /***********************************************************************************************
+//     * PRIVATE METHODS
+//     **********************************************************************************************/
+//    /**Updates the items displayed on the entryList**/
+//    private int refreshData() {
+//
+//        // Instantiates a new ArrayList that is tied to the ListAdapter
+//        ArrayList<FuelLog> fuelLogArrayList = new ArrayList<>();
+//
+//        // Instantiates a new ListAdapter
+//        ListAdapter listAdapter = new ListAdapter(HistoryActivity.this, R.layout.row_item_list, fuelLogArrayList);
+//        // Sets the adapter to the list
+//        entryList.setAdapter(listAdapter);
+//
+//        // Pulls all entries from the DB into an ArrayList
+//        // Param1: selection. Null for all entries
+//        // Param2: selection arguments. Null for all entries
+//        ArrayList<FuelLog> logsFromDB = dataAO.getAllEntries(null, null);
+//
+//        // For ever entry in the DB...
+//        for (int i = 0; i < logsFromDB.size(); i++) {
+//
+//            // Instantiates a new temp FuelLog object to pass data from the DB arraylist to the listAdapter arraylist
+//            FuelLog entry = new FuelLog();
+//
+//            // Copies odom value from DB to the list
+//            entry.setCurrentOdomVal(logsFromDB.get(i).getCurrentOdomVal());
+//            // Copies fillup amount from DB to the list
+//            entry.setFuelTopupAmount(logsFromDB.get(i).getFuelTopupAmount());
+//            // Copies record date from DB to the list
+//            entry.setRecordDate(logsFromDB.get(i).getRecordDate());
+//            // Copies partial fill data from DB to the list
+//            entry.setPartialFill(logsFromDB.get(i).getPartialFill());
+//            // Copies id from DB to the list
+//            entry.setItemID(logsFromDB.get(i).getItemID());
+//
+//            // Adds the temp FuelLog to the adapter-attached arraylist
+//            fuelLogArrayList.add(entry);
+//            // Notifies the adapter the dataset has changed
+//            listAdapter.notifyDataSetChanged();
+//        }
+//
+//        // Returns the number of entries within the DB
+//        return logsFromDB.size();
+//    }
 }

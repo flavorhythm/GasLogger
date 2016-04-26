@@ -10,13 +10,12 @@ import data.DataAccessObject;
  * Created by ZYuki on 1/11/2016.
  */
 public class ApplicationDatabase extends Application {
-
     /***********************************************************************************************
      * GLOBAL VARIABLES
      **********************************************************************************************/
     /**PUBLIC VARIABLES**/
     // Public DataAccessObject so the entire application has access to the DB
-    public DataAccessObject mDataAO;
+    public DataAccessObject dataAccess;
 
     /***********************************************************************************************
      * OVERRIDE METHODS
@@ -24,10 +23,9 @@ public class ApplicationDatabase extends Application {
     /**Sets up the DataAccessObject whenever the Application is initialized**/
     @Override
     public void onCreate() {
-
         // Instantiates a new DataAccessObject
         // Param1: this application's context
-        mDataAO = new DataAccessObject(getApplicationContext());
+        dataAccess = new DataAccessObject(getApplicationContext());
 
         // Opens DB
         openDatabaseAndTry();
@@ -39,9 +37,8 @@ public class ApplicationDatabase extends Application {
     /**Closes the DataAccessObject whenever the Application is terminated**/
     @Override
     public void onTerminate() {
-
         // Closes DB
-        mDataAO.close();
+        dataAccess.close();
 
         // This method's Super call
         super.onTerminate();
@@ -52,11 +49,10 @@ public class ApplicationDatabase extends Application {
      **********************************************************************************************/
     /**Encapsulates Database Open in a try-catch**/
     private void openDatabaseAndTry() {
-
         // Try-catch block
         try {
             // Opens DB
-            mDataAO.open();
+            dataAccess.open();
         // Catches an SQLException
         } catch(SQLException e) {
             // Prints the stack trace of the exception

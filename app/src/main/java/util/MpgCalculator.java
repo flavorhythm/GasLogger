@@ -1,15 +1,16 @@
 package util;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.zenoyuki.flavorhythm.gaslogger.ApplicationDatabase;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import data.DataAccessObject;
 import model.FuelLog;
+import model.MilesPerGal;
 
 /**
  * Created by zyuki on 1/8/2016.
@@ -21,8 +22,8 @@ public final class MpgCalculator {
 
     public static String calculate(Context context) {
         //Sets up DB variable and puts all entries into arraylist fuelLogArrayList
-        DataAccessObject dataAO = ((ApplicationDatabase)context).mDataAO;
-        ArrayList<FuelLog> fuelLogArrayList = dataAO.getAllEntries(null, null);
+        DataAccessObject dataAO = ((ApplicationDatabase)context).dataAccess;
+        List<FuelLog> fuelLogArrayList = dataAO.getAllEntries(null, null);
 
         if(fuelLogArrayList.size() <= 1) {
             return NULL_VALUE;
@@ -31,8 +32,44 @@ public final class MpgCalculator {
         return mainCalculator(fuelLogArrayList);
     }
 
-    private static String mainCalculator(ArrayList<FuelLog> fuelLogArrayList) {
-        ArrayList<Double> mpgList = new ArrayList<>();
+    public static List<MilesPerGal> findMpgList(Context context) {
+        List<MilesPerGal> mpgList = new ArrayList<>();
+
+        DataAccessObject dataAccess = ((ApplicationDatabase)context).dataAccess;
+        List<FuelLog> logList = dataAccess.getAllEntries(null, null);
+
+        if(logList.size() > 1) {
+            int initIndex = logList.size() - 1;
+
+            for(int i = initIndex; i > 0; i--) {
+                FuelLog fuelLogNext = logList.get(i - 1);
+                FuelLog fuelLogCurrent = logList.get(i);
+
+                mpgList.add(calculateMpg(fuelLogNext, fuelLogCurrent));
+            }
+
+            return mpgList;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public static MilesPerGal calculateMpg(FuelLog next, FuelLog curr) {
+        if(!curr.getPartialFill() && !next.getPartialFill()) {
+            double gasUsed = next.getFuelTopupAmount();
+            int distTravel = next.getCurrentOdomVal() - curr.getCurrentOdomVal();
+
+            return new MilesPerGal(
+                    curr.getRecordDate(),
+                    Double.valueOf(distTravel / gasUsed).floatValue()
+            );
+        }
+
+        return null;
+    }
+
+    private static String mainCalculator(List<FuelLog> fuelLogArrayList) {
+        List<Double> mpgList = new ArrayList<>();
         int initIndex = fuelLogArrayList.size() - 1;
 
         for(int i = initIndex; i > 0; i--) {
