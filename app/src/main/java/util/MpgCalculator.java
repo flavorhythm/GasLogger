@@ -87,8 +87,8 @@ public final class MpgCalculator {
         double mpgAvg = 0;
         for(double mpg : mpgList) {mpgAvg += mpg;} mpgAvg /= mpgList.size();
 
-        mpgAvg = mpgAvg < 1000.0 ? mpgAvg : 999.9;
-        DecimalFormat df = new DecimalFormat("###.0"); //Formats MPG value
+        mpgAvg = mpgAvg < 100.0 ? mpgAvg : 99.9;
+        DecimalFormat df = new DecimalFormat("##.0"); //Formats MPG value
         return df.format(mpgAvg);
     }
 }

@@ -83,9 +83,7 @@ public class DialogItemEntry extends DialogFragment implements View.OnClickListe
 
         entryId = getArguments().getInt(ENTRY_ID_KEY);
 
-        if(entryId != Constant.NEW_ITEM) {
-            findData(entryId);
-        }
+        if(entryId != Constant.NEW_ITEM) {findData(entryId);}
     }
 
     private void populateFields() {
@@ -99,10 +97,8 @@ public class DialogItemEntry extends DialogFragment implements View.OnClickListe
 
     private void findData(int entryId) {
         DataAccessObject dataAccess = ((ApplicationDatabase)getActivity().getApplication()).dataAccess;
-        String selection = FillupTable.KEY_ID + " =?";
-        String[] selectionArgs = new String[] {String.valueOf(entryId)};
 
-        fuelLog = dataAccess.getEntry(selection, selectionArgs);
+        fuelLog = dataAccess.findEntryById(entryId);
     }
 
     @Nullable
@@ -156,31 +152,61 @@ public class DialogItemEntry extends DialogFragment implements View.OnClickListe
                 SharedPreferences preferences = getContext().getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
                 int minOdom = preferences.getInt(Constant.MIN_MILEAGE_KEY, 0);
 
-                if(minOdom >= odomNewVal) {
-                    errorDisplay(odomWrapper, getResources().getString(R.string.odom_low_value_error) + " " + String.valueOf(minOdom));
-                    break;
-                } else {
+                if(entryId != Constant.NEW_ITEM) {
                     FuelLog fuelLog = new FuelLog();
 
+                    //TODO: needs to be between the previous and next odoms
                     //TODO: need to allow dialog to save when editing (cannot be below highest odom reading)
                     fuelLog.setCurrentOdomVal(Integer.parseInt(odomVal.getText().toString()));
                     fuelLog.setFuelTopupAmount(Float.parseFloat(gasVal.getText().toString()));
 					fuelLog.setPartialFill(partialFillCheck.isChecked());
                     fuelLog.setRecordDate(System.currentTimeMillis());
+                    fuelLog.setItemID(entryId);
 
                     DataAccessObject dataAccess = ((ApplicationDatabase)getActivity().getApplication()).dataAccess;
-                    int entryID = Long.valueOf(dataAccess.addEntry(fuelLog)).intValue();
+                    int updatedCount = dataAccess.updateEntry(fuelLog);
 
-                    fuelLog.setItemID(entryID);
+                    //TODO: needs to refresh
+                    callback.addLog(fuelLog);
+
+                    showUpdateSnackbar(updatedCount);
+                } else {
+                    if(minOdom >= odomNewVal) {
+                        errorDisplay(odomWrapper, getResources().getString(R.string.odom_low_value_error) + " " + String.valueOf(minOdom));
+                        break;
+                    }
+
+                    FuelLog fuelLog = new FuelLog();
+
+                    fuelLog.setCurrentOdomVal(Integer.parseInt(odomVal.getText().toString()));
+                    fuelLog.setFuelTopupAmount(Float.parseFloat(gasVal.getText().toString()));
+                    fuelLog.setPartialFill(partialFillCheck.isChecked());
+                    fuelLog.setRecordDate(System.currentTimeMillis());
+
+                    DataAccessObject dataAccess = ((ApplicationDatabase)getActivity().getApplication()).dataAccess;
+                    int newId = Long.valueOf(dataAccess.addEntry(fuelLog)).intValue();
+
+                    fuelLog.setItemID(newId);
 
                     callback.addLog(fuelLog);
 
-                    showAddSnackbar(entryID);
+                    showAddSnackbar(newId);
                 }
             case R.id.alrt_btn_dismiss:
                 getDialog().dismiss();
 				break;
 		}
+    }
+
+    private void showUpdateSnackbar(int updatedCount) {
+        final int ERROR = 0;
+        View root = getActivity().findViewById(R.id.main_root);
+
+        if(updatedCount != ERROR) {
+            Snackbar.make(root, getResources().getString(R.string.save_snack_success), Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(root, getResources().getString(R.string.save_snack_error), Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private void showAddSnackbar(int entryID) {

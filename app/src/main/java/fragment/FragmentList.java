@@ -1,5 +1,6 @@
 package fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,13 @@ import util.MpgCalculator;
 public class FragmentList extends Fragment  {
     private ListAdapter listAdapter;
     private List<MilesPerGal> mpgList;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+
+    }
 
     @Nullable
     @Override
@@ -71,18 +79,20 @@ public class FragmentList extends Fragment  {
 
     public int getCount() {return listAdapter.getCount();}
 
-
-
-    /****/
-    /****/
-    private String mpgListPrint() {
-        String mpgString = "";
-        for(MilesPerGal mpg : mpgList) {
-            mpgString += mpg.getMpg() + " ";
-        }
-
-        return mpgString;
+    public interface Callback {
+        List<>
     }
-    /****/
-    /****/
+
+//    /****/
+//    /****/
+//    private String mpgListPrint() {
+//        String mpgString = "";
+//        for(MilesPerGal mpg : mpgList) {
+//            mpgString += mpg.getMpg() + " ";
+//        }
+//
+//        return mpgString;
+//    }
+//    /****/
+//    /****/
 }

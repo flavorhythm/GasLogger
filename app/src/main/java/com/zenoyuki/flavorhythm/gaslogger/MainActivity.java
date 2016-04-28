@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import data.DataAccessObject;
 import fragment.DialogItemDelete;
 import fragment.DialogItemEntry;
 import fragment.DialogRouter;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity
     private FragmentChart fragChart;
     private FragmentList fragList;
 
+    private DataAccessObject dataAccess;
+
     /***********************************************************************************************
      * OVERRIDE METHODS
      **********************************************************************************************/
@@ -52,6 +55,8 @@ public class MainActivity extends AppCompatActivity
         // Ties the layout to this activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dataAccess = ((ApplicationDatabase)getApplication()).dataAccess;
 
         findViewsById();
 
