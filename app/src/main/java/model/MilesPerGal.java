@@ -10,8 +10,6 @@ public class MilesPerGal {
     private long recordDate;
     private float mpg;
 
-    public MilesPerGal() {}
-
     public MilesPerGal(long recordDate, float mpg) {
         this.recordDate = recordDate;
         this.mpg = mpg;
@@ -22,12 +20,4 @@ public class MilesPerGal {
      **********************************************************************************************/
     public long getRecordDate() {return recordDate;}
     public float getMpg() {return mpg;}
-
-    /***********************************************************************************************
-     * SETTER METHODS
-     **********************************************************************************************/
-    public void setRecordDate(long recordDate) {this.recordDate = recordDate;}
-    public void setMpg(float mpg) {this.mpg = mpg;}
-
-
 }

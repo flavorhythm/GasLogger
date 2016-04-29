@@ -6,9 +6,17 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.github.mikephil.charting.data.Entry;
+
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import model.MilesPerGal;
 import util.Constant;
@@ -20,10 +28,9 @@ import static data.FillupTable.*;
  * Created by ZYuki on 1/11/2016.
  */
 public class DataAccessObject {
-    private static final int DEL_ALL = -1;
-
     private List<FuelLog> logList;
-    private List<MilesPerGal> mpgList;
+    private List<Entry> entryList;
+    private List<String> labelList;
 
     private SQLiteDatabase db;
     private DatabaseHelper dbHelper;
@@ -32,29 +39,28 @@ public class DataAccessObject {
     public DataAccessObject(Context context) {
         dbHelper = DatabaseHelper.getInstance(context);
         logList = new ArrayList<>();
-        mpgList = new ArrayList<>();
-        queryAll(null, null);
+
+        entryList = new ArrayList<>();
+        labelList = new ArrayList<>();
 
         this.context = context;
     }
 
-    public void open() throws SQLException {db = dbHelper.getWritableDatabase();}
+    public void open() throws SQLException {
+        db = dbHelper.getWritableDatabase();
+
+        queryAll(null, null);
+    }
 
     public void close() {db.close();}
 
     public List<FuelLog> getLogList() {return logList;}
 
-    public List<MilesPerGal> getMpgList() {return mpgList;}
+    public List<Entry> getEntryList() {return entryList;}
 
-    public float getMpgAvg() {
-        int cumulative = 0;
+    public List<String> getLabelList() {return labelList;}
 
-        for(MilesPerGal mpg : mpgList) {
-            cumulative += mpg.getMpg();
-        }
-
-        return cumulative / mpgList.size();
-    }
+    public int getLogSize() {return logList.size();}
 
     public void queryAll(String nullableSelection, String[] nullableSelectionArgs) {
         Cursor cursor = db.query(
@@ -64,7 +70,7 @@ public class DataAccessObject {
                 nullableSelectionArgs,
                 null,
                 null,
-                RECORD_DATE + " DESC"
+                RECORD_DATE + Constant.SORT_ORDER
         );
 
         if(cursor.moveToFirst()) {
@@ -86,25 +92,13 @@ public class DataAccessObject {
         updateMpgs();
     }
 
-    public MilesPerGal calculateMpg(FuelLog nextEntry, FuelLog currEntry) {
-        if(!currEntry.getPartialFill() && !nextEntry.getPartialFill()) {
-            double gasUsed = nextEntry.getFuelTopupAmount();
-            int distTravel = nextEntry.getCurrentOdomVal() - currEntry.getCurrentOdomVal();
-
-            return new MilesPerGal(
-                    currEntry.getRecordDate(),
-                    Double.valueOf(distTravel / gasUsed).floatValue()
-            );
-        }
-
-        return null;
-    }
-
     public long addLog(FuelLog entry) {
         final int first = 0;
-        final int next = 1;
         logList.add(first, entry);
-        mpgList.add(calculateMpg(logList.get(next), logList.get(first)));
+
+        if(logList.size() > 1) {
+            updateMpgs();
+        }
 
         int partialFillInt = entry.getPartialFill() ? 1 : 0;
 
@@ -147,12 +141,70 @@ public class DataAccessObject {
         return updateCount == oneUpdate;
     }
 
-    public void clearLogs() {
-        logList.clear();
-        mpgList.clear();
-        deleteAllEntries();
+    public int deleteAllEntries() {
+        int delCount = db.delete(
+                TABLE_NAME,
+                Constant.DEL_ALL,
+                null
+        );
 
         updatePreferences();
+
+        return delCount;
+    }
+
+    public int clearLogs() {
+        logList.clear();
+
+        entryList.clear();
+        labelList.clear();
+
+        int delCount = deleteAllEntries();
+
+        updatePreferences();
+
+        return delCount;
+    }
+
+    public String formattedAvg() {
+        double mpgAvg = getMpgAvg();
+
+        if(mpgAvg != Constant.EMPTY_DOUBLE) {
+            mpgAvg = mpgAvg < 100.0 ? mpgAvg : 99.9;
+            DecimalFormat df = new DecimalFormat(Constant.FLOAT_FORMAT); //Formats MPG value
+
+            return df.format(mpgAvg);
+        } else {
+            return Constant.NULL_MPG;
+        }
+    }
+
+    public double getMpgAvg() {
+        if(logList.size() > 1) {
+            int cumulative = 0;
+
+            for(Entry entry : entryList) {
+                cumulative += entry.getVal();
+            }
+
+            return cumulative / entryList.size();
+        } else {
+            return Constant.EMPTY_DOUBLE;
+        }
+    }
+
+    public MilesPerGal calculateMpg(FuelLog nextEntry, FuelLog currEntry) {
+        if(!currEntry.getPartialFill() && !nextEntry.getPartialFill()) {
+            double gasUsed = nextEntry.getFuelTopupAmount();
+            int distTravel = nextEntry.getCurrentOdomVal() - currEntry.getCurrentOdomVal();
+
+            return new MilesPerGal(
+                    currEntry.getRecordDate(),
+                    Double.valueOf(distTravel / gasUsed).floatValue()
+            );
+        }
+
+        return null;
     }
 
     public FuelLog findEntryById(int entryId) {
@@ -163,6 +215,29 @@ public class DataAccessObject {
         }
 
         return null;
+    }
+
+    public Map<String, FuelLog> getVicinity(int entryId) {
+        Map<String, FuelLog> vicinityMap = new HashMap<>();
+        int position = 0;
+
+        for(FuelLog aLog : logList) {
+            if(aLog.getItemID() == entryId) {
+                position = logList.indexOf(aLog);
+            }
+        }
+
+        //TODO: doesn't work when list is empty
+        if(!logList.isEmpty()) {
+            if (position != (logList.size() - 1)) {
+                vicinityMap.put(Constant.NEXT_ENTRY, logList.get(position - 1));
+            }
+            if (position != 0) {
+                vicinityMap.put(Constant.PREV_ENTRY, logList.get(position + 1));
+            }
+        }
+
+        return vicinityMap;
     }
 
     private void updateLists(FuelLog entry) {
@@ -181,7 +256,8 @@ public class DataAccessObject {
     }
 
     private void updateMpgs() {
-        mpgList.clear();
+        entryList.clear();
+        labelList.clear();
 
         if(logList.size() > 1) {
             int initIndex = logList.size() - 1;
@@ -190,35 +266,17 @@ public class DataAccessObject {
                 FuelLog nextEntry = logList.get(i - 1);
                 FuelLog currEntry = logList.get(i);
 
-                mpgList.add(calculateMpg(nextEntry, currEntry));
+                MilesPerGal mpg = calculateMpg(nextEntry, currEntry);
+                entryList.add(new Entry(mpg.getMpg(), initIndex - i));
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(mpg.getRecordDate());
+                labelList.add(new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(cal.getTime()));
             }
         }
     }
 
-    public int deleteEntry(int id) {
-        final String SELECT_ALL = "1";
-        String selection = (id == DEL_ALL) ? SELECT_ALL : KEY_ID + " = " + id;
-
-        int delCount = db.delete(
-                TABLE_NAME,
-                selection,
-                null
-        );
-
-        updatePreferences();
-
-        return delCount;
-    }
-
-    public int deleteAllEntries() {
-        return deleteEntry(DEL_ALL);
-    }
-
     private void updatePreferences() {
-//        String selection = ODOM_VAL + " = (SELECT MAX(" + ODOM_VAL + ") FROM " + TABLE_NAME + ")";
-//
-//        FuelLog entry = this.getAllEntries(selection, null).get(0);
-
         int maxOdom = 0;
         for(FuelLog entry : logList) {
             int prevOdom = entry.getCurrentOdomVal();
@@ -231,85 +289,5 @@ public class DataAccessObject {
         SharedPreferences.Editor editor = context.getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE).edit();
         editor.putInt(Constant.MIN_MILEAGE_KEY, maxOdom);
         editor.apply();
-    }
-
-    /**********************************************************************************************/
-
-    public long addEntry(FuelLog entry) {
-        int partialFillInt = entry.getPartialFill() ? 1 : 0;
-
-        ContentValues values = new ContentValues();
-        values.put(ODOM_VAL, entry.getCurrentOdomVal());
-        values.put(FUEL_AMOUNT, entry.getFuelTopupAmount());
-        values.put(PARTIAL_FILL, partialFillInt);
-        values.put(RECORD_DATE, entry.getRecordDate());
-
-        long entryID = db.insert(TABLE_NAME, null, values);
-
-        updatePreferences();
-
-        return entryID;
-    }
-
-    public int updateEntry(FuelLog entry) {
-        int partialFillInt = entry.getPartialFill() ? 1 : 0;
-
-        ContentValues values = new ContentValues();
-        values.put(KEY_ID, entry.getItemID());
-        values.put(ODOM_VAL, entry.getCurrentOdomVal());
-        values.put(FUEL_AMOUNT, entry.getFuelTopupAmount());
-        values.put(PARTIAL_FILL, partialFillInt);
-        values.put(RECORD_DATE, entry.getRecordDate());
-
-        int updateCount = db.update(
-                TABLE_NAME,
-                values,
-                KEY_ID + " =?",
-                new String[] {String.valueOf(entry.getItemID())}
-        );
-
-        updatePreferences();
-
-        return updateCount;
-    }
-
-//    public FuelLog getEntry(String selection, String[] selectionArgs) {
-//        List<FuelLog> fuelLogArrayList = getAllEntries(selection, selectionArgs);
-//
-//        if(fuelLogArrayList.size() == 1) {
-//            return fuelLogArrayList.get(0);
-//        } else {
-//            return null;
-//        }
-//    }
-
-    public List<FuelLog> getAllEntries(String nullableSelection, String[] nullableSelectionArgs) {
-        List<FuelLog> fuelLogArrayList = new ArrayList<>();
-        Cursor cursor = db.query(
-                TABLE_NAME,
-                ALL_COLUMNS,
-                nullableSelection,
-                nullableSelectionArgs,
-                null,
-                null,
-                RECORD_DATE + " DESC"
-        );
-
-        if(cursor.moveToFirst()) {
-            do {
-                FuelLog fuelLog = new FuelLog(); //Creates new fuelLog object
-
-                fuelLog.setItemID(cursor.getInt(cursor.getColumnIndex(KEY_ID))); //Sets fuelLog object's itemID variable to data within database
-                fuelLog.setCurrentOdomVal(cursor.getInt(cursor.getColumnIndex(ODOM_VAL))); //Sets fuelLog object's currentOdomVal variable to data within database
-                fuelLog.setFuelTopupAmount(cursor.getDouble(cursor.getColumnIndex(FUEL_AMOUNT))); //Sets fuelLog object's fuelTopupAmount variable to data within database
-                fuelLog.setPartialFill(cursor.getInt(cursor.getColumnIndex(PARTIAL_FILL)) == 1);
-                fuelLog.setRecordDate(cursor.getLong(cursor.getColumnIndex(RECORD_DATE)));
-
-                fuelLogArrayList.add(fuelLog); //Adds the entire fuelLog object into the fuelLogList
-            } while(cursor.moveToNext());
-        }
-
-        cursor.close();
-        return fuelLogArrayList;
     }
 }

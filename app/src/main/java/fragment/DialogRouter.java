@@ -10,20 +10,21 @@ import android.support.v4.app.FragmentTransaction;
  * Created by zyuki on 1/12/2016.
  */
 public final class DialogRouter {
+    private static final String DIALOG_TAG = "dialog";
     private DialogRouter() {}
 
     public static void showEntryDialog(Activity activity, int entryId) {
         FragmentTransaction fTransaction = clearFragments(activity);
 
         DialogItemEntry entryDialog = DialogItemEntry.newInstance(entryId);
-        entryDialog.show(fTransaction, "dialog");
+        entryDialog.show(fTransaction, DIALOG_TAG);
     }
 
     public static void showDeleteDialog(Activity activity) {
         FragmentTransaction fTransaction = clearFragments(activity);
 
         DialogItemDelete deleteDialog = DialogItemDelete.newInstance();
-        deleteDialog.show(fTransaction, "dialog");
+        deleteDialog.show(fTransaction, DIALOG_TAG);
     }
 
     private static FragmentTransaction clearFragments(Activity activity) {
@@ -31,7 +32,7 @@ public final class DialogRouter {
 
         FragmentTransaction fragTrans = fManager.beginTransaction();
 
-        Fragment previousFragment = fManager.findFragmentByTag("dialog");
+        Fragment previousFragment = fManager.findFragmentByTag(DIALOG_TAG);
         if(previousFragment != null) {fragTrans.remove(previousFragment);}
 
         fragTrans.addToBackStack(null);

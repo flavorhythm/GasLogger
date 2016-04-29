@@ -1,5 +1,6 @@
 package fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,17 +15,29 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.zenoyuki.flavorhythm.gaslogger.R;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import util.MpgCalculator;
 
 /**
  * Created by zyuki on 4/25/2016.
  */
 public class FragmentChart extends Fragment {
+    private List<Entry> entryList;
+    private List<String> labelList;
+
     private TextView mpgAvg;
     private LineChart chart;
+
+    private Callback callback;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        callback = (Callback)context;
+
+        entryList = callback.getEntryList();
+        labelList = callback.getLabelList();
+    }
 
     @Nullable
     @Override
@@ -34,18 +47,11 @@ public class FragmentChart extends Fragment {
 
         mpgAvg = (TextView)customView.findViewById(R.id.chartFrag_text_mpgAvg);
         chart = (LineChart)customView.findViewById(R.id.chartFrag_chart);
-        updateAverage();
 
-        List<Entry> entryList = new ArrayList<>();
-        List<String> xList = new ArrayList<>();
-        xList.add("T1"); xList.add("T2"); xList.add("T3"); xList.add("T4");
-        Entry entry1 = new Entry(1.0f, 0);
-        Entry entry2 = new Entry(1.5f, 1);
-        Entry entry3 = new Entry(2.0f, 2);
-        Entry entry4 = new Entry(2.5f, 3);
-        entryList.add(entry1); entryList.add(entry2); entryList.add(entry3); entryList.add(entry4);
+        updateAvg(callback.formattedAvg());
+
         LineDataSet dataset = new LineDataSet(entryList, "test");
-        LineData data = new LineData(xList, dataset);
+        LineData data = new LineData(labelList, dataset);
 
         chart.setData(data);
 
@@ -54,7 +60,16 @@ public class FragmentChart extends Fragment {
         return customView;
     }
 
-    public void updateAverage() {
-        mpgAvg.setText(MpgCalculator.calculate(getActivity().getApplicationContext()));
+    public void updateAvg(String formattedAvg) {mpgAvg.setText(formattedAvg);}
+
+    public void notifyChart() {
+        chart.notifyDataSetChanged();
+        chart.invalidate();
+    }
+
+    public interface Callback {
+        List<Entry> getEntryList();
+        List<String> getLabelList();
+        String formattedAvg();
     }
 }

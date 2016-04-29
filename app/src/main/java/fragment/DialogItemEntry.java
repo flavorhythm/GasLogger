@@ -22,7 +22,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.zenoyuki.flavorhythm.gaslogger.ApplicationDatabase;
+import com.zenoyuki.flavorhythm.gaslogger.MainActivity;
 import com.zenoyuki.flavorhythm.gaslogger.R;
+
+import java.util.List;
+import java.util.Map;
 
 import data.FillupTable;
 import util.Constant;
@@ -64,7 +68,7 @@ public class DialogItemEntry extends DialogFragment implements View.OnClickListe
     private Callback callback;
 
     private FuelLog fuelLog;
-    private int entryId;
+    private Map<String, FuelLog> vicinityList;
 
     public static DialogItemEntry newInstance(int entryId) {
         DialogItemEntry entryDialog = new DialogItemEntry();
@@ -81,18 +85,21 @@ public class DialogItemEntry extends DialogFragment implements View.OnClickListe
 
         callback = (Callback)activity;
 
-        entryId = getArguments().getInt(ENTRY_ID_KEY);
+        int entryId = getArguments().getInt(ENTRY_ID_KEY);
 
         if(entryId != Constant.NEW_ITEM) {findData(entryId);}
+        vicinityList = ((MainActivity)getActivity()).getVicinity(entryId);
     }
 
     private void populateFields() {
-        odomVal.setText(String.valueOf(fuelLog.getCurrentOdomVal()));
-        gasVal.setText(String.valueOf(fuelLog.getFuelTopupAmount()));
-        partialFillCheck.setChecked(fuelLog.getPartialFill());
+        if(fuelLog != null) {
+            odomVal.setText(String.valueOf(fuelLog.getCurrentOdomVal()));
+            gasVal.setText(String.valueOf(fuelLog.getFuelTopupAmount()));
+            partialFillCheck.setChecked(fuelLog.getPartialFill());
 
-        String idString = "(" + String.valueOf(entryId) + ")";
-        idVal.setText(idString);
+            String idString = "(" + String.valueOf(fuelLog.getItemID()) + ")";
+            idVal.setText(idString);
+        }
     }
 
     private void findData(int entryId) {
@@ -109,7 +116,8 @@ public class DialogItemEntry extends DialogFragment implements View.OnClickListe
 
 		findViewsByID();
 
-        if(entryId != Constant.NEW_ITEM) {
+        //TODO: fuelLog might be an issue
+        if(fuelLog.getItemID() != Constant.NEW_ITEM) {
             populateFields();
         }
 
@@ -152,27 +160,48 @@ public class DialogItemEntry extends DialogFragment implements View.OnClickListe
                 SharedPreferences preferences = getContext().getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
                 int minOdom = preferences.getInt(Constant.MIN_MILEAGE_KEY, 0);
 
-                if(entryId != Constant.NEW_ITEM) {
-                    FuelLog fuelLog = new FuelLog();
-
+                if(fuelLog.getItemID() != Constant.NEW_ITEM) {
                     //TODO: needs to be between the previous and next odoms
                     //TODO: need to allow dialog to save when editing (cannot be below highest odom reading)
-                    fuelLog.setCurrentOdomVal(Integer.parseInt(odomVal.getText().toString()));
-                    fuelLog.setFuelTopupAmount(Float.parseFloat(gasVal.getText().toString()));
-					fuelLog.setPartialFill(partialFillCheck.isChecked());
-                    fuelLog.setRecordDate(System.currentTimeMillis());
-                    fuelLog.setItemID(entryId);
+                    boolean lessThanNext = compareOdoms(Constant.NEXT_ENTRY, odomVal.getText().toString());
+                    boolean moreThanPrev = compareOdoms(Constant.PREV_ENTRY, odomVal.getText().toString());
 
-                    DataAccessObject dataAccess = ((ApplicationDatabase)getActivity().getApplication()).dataAccess;
-                    int updatedCount = dataAccess.updateEntry(fuelLog);
+                    Log.v("test", String.valueOf(lessThanNext));
+                    Log.v("test", String.valueOf(moreThanPrev));
 
-                    //TODO: needs to refresh
-                    callback.addLog(fuelLog);
+                    if(lessThanNext && moreThanPrev) {
+                        FuelLog fuelLog = new FuelLog();
 
-                    showUpdateSnackbar(updatedCount);
+                        fuelLog.setCurrentOdomVal(Integer.parseInt(odomVal.getText().toString()));
+                        fuelLog.setFuelTopupAmount(Float.parseFloat(gasVal.getText().toString()));
+                        fuelLog.setPartialFill(partialFillCheck.isChecked());
+
+                        fuelLog.setRecordDate(this.fuelLog.getRecordDate());
+                        fuelLog.setItemID(this.fuelLog.getItemID());
+
+                        boolean updated = callback.updateLog(fuelLog);
+                        showUpdateSnackbar(updated);
+                    } else {
+                        if(!lessThanNext) {
+                            errorDisplay(
+                                    odomWrapper,
+                                    getResources().getString(R.string.next_odom_conflict)
+                            );
+                        }
+                        if(!moreThanPrev) {
+                            errorDisplay(
+                                    odomWrapper,
+                                    getResources().getString(R.string.prev_odom_conflict)
+                            );
+                        }
+                        break;
+                    }
                 } else {
                     if(minOdom >= odomNewVal) {
-                        errorDisplay(odomWrapper, getResources().getString(R.string.odom_low_value_error) + " " + String.valueOf(minOdom));
+                        errorDisplay(
+                                odomWrapper,
+                                getResources().getString(R.string.odom_low_value_error) + " " + String.valueOf(minOdom)
+                        );
                         break;
                     }
 
@@ -183,13 +212,7 @@ public class DialogItemEntry extends DialogFragment implements View.OnClickListe
                     fuelLog.setPartialFill(partialFillCheck.isChecked());
                     fuelLog.setRecordDate(System.currentTimeMillis());
 
-                    DataAccessObject dataAccess = ((ApplicationDatabase)getActivity().getApplication()).dataAccess;
-                    int newId = Long.valueOf(dataAccess.addEntry(fuelLog)).intValue();
-
-                    fuelLog.setItemID(newId);
-
-                    callback.addLog(fuelLog);
-
+                    int newId = callback.addLog(fuelLog);
                     showAddSnackbar(newId);
                 }
             case R.id.alrt_btn_dismiss:
@@ -198,11 +221,30 @@ public class DialogItemEntry extends DialogFragment implements View.OnClickListe
 		}
     }
 
-    private void showUpdateSnackbar(int updatedCount) {
-        final int ERROR = 0;
+    private boolean compareOdoms(String whichEntry, String fromTextView) {
+        boolean isNotEmpty = vicinityList.containsKey(whichEntry);
+
+        if(isNotEmpty) {
+            int entryOdomVal = vicinityList.get(whichEntry).getCurrentOdomVal();
+            int thisOdomVal = Integer.valueOf(fromTextView);
+
+            switch(whichEntry) {
+                case Constant.NEXT_ENTRY:
+                    return entryOdomVal > thisOdomVal;
+                case Constant.PREV_ENTRY:
+                    return entryOdomVal < thisOdomVal;
+                default:
+                    return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    private void showUpdateSnackbar(boolean updated) {
         View root = getActivity().findViewById(R.id.main_root);
 
-        if(updatedCount != ERROR) {
+        if(updated) {
             Snackbar.make(root, getResources().getString(R.string.save_snack_success), Snackbar.LENGTH_SHORT).show();
         } else {
             Snackbar.make(root, getResources().getString(R.string.save_snack_error), Snackbar.LENGTH_SHORT).show();
@@ -241,7 +283,9 @@ public class DialogItemEntry extends DialogFragment implements View.OnClickListe
 	}
 
     public interface Callback {
-        void addLog(FuelLog fuelLog);
+        int addLog(FuelLog fuelLog);
+        boolean updateLog(FuelLog fuelLog);
+        Map<String, FuelLog> getVicinity(int entryId);
     }
 
     private class CustomTextWatcher implements TextWatcher {

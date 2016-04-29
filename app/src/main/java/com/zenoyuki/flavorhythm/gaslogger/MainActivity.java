@@ -9,13 +9,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.github.mikephil.charting.data.Entry;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import data.DataAccessObject;
 import fragment.DialogItemDelete;
@@ -24,13 +26,11 @@ import fragment.DialogRouter;
 import fragment.FragmentChart;
 import fragment.FragmentList;
 import model.FuelLog;
-import model.MilesPerGal;
 import util.Constant;
-import util.MpgCalculator;
 
 public class MainActivity extends AppCompatActivity
-        implements DialogItemEntry.Callback, DialogItemDelete.Callback, adapter.ListAdapter.Callback {
-    //TODO: Display graph, add tabs
+        implements DialogItemEntry.Callback, DialogItemDelete.Callback, FragmentList.Callback,
+        FragmentChart.Callback {
     /***********************************************************************************************
      * GLOBAL VARIABLES
      **********************************************************************************************/
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity
     /**Finds views and sets up buttons**/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //TODO backup to Drive
+        //TODO: backup to Drive
         // Ties the layout to this activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity
     /**Creates the menu from layout >> menu_main.xml**/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -96,8 +95,6 @@ public class MainActivity extends AppCompatActivity
         switch(id) {
             case R.id.menu_deleteAll:
                 // When the "delete" item is clicked, a dialog fragment opens
-                // Param1: this activity
-                // Param2: integer value dependent on the number of entries in the DB
                 DialogRouter.showDeleteDialog(MainActivity.this);
                 break;
             default:
@@ -108,51 +105,57 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /**Changes the mpg value in mpgText every time focus changes to this activity**/
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-
-        // The Super call of this method
-        super.onWindowFocusChanged(hasFocus);
-
-        // Whenever this activity has focus, set the display to the calculated MPG value
-        if(hasFocus) {
-//            mpgText.setText(MpgCalculator.calculate(getApplicationContext()));
-        }
-    }
-
-    //TODO: reorganize list creations
-    @Override
-    public void addLog(FuelLog fuelLog) {
-        fragList.addLog(fuelLog);
-        fragChart.updateAverage();
-    }
-
-//    @Override
-//    public void removeLog(int listPos) {
-//        fragList.removeLog(listPos);
-//        fragChart.updateAverage();
-//    }
+    public List<FuelLog> getLogList() {return dataAccess.getLogList();}
 
     @Override
-    public void clearList() {
-        fragList.clear();
-        fragChart.updateAverage();
+    public List<Entry> getEntryList() {return dataAccess.getEntryList();}
+
+    @Override
+    public List<String> getLabelList() {return dataAccess.getLabelList();}
+
+    @Override
+    public String formattedAvg() {return dataAccess.formattedAvg();}
+
+    @Override
+    public Map<String, FuelLog> getVicinity(int entryId) {
+        return dataAccess.getVicinity(entryId);
     }
 
     @Override
-    public void addMpg(MilesPerGal mpg) {fragList.addMpg(mpg);}
+    public int addLog(FuelLog fuelLog) {
+        long newId = dataAccess.addLog(fuelLog);
+        fragList.notifyAdapter();
+        notifyChart();
 
-    @Override
-    public int listSize() {
-        return fragList.getCount();
+        return Long.valueOf(newId).intValue();
     }
 
-    //    @Override
-//    public void removeMpg(int fillupListPos, int fillupListSize) {
-//        if(fillupListPos != (fillupListSize - 1)) {fragList.removeMpg(fillupListPos);}
-//        if(fillupListPos != 0) {fragList.removeMpg(fillupListPos - 1);}
-//    }
+    @Override
+    public boolean updateLog(FuelLog fuelLog) {
+        boolean updated = dataAccess.updateLog(fuelLog);
+        fragList.notifyAdapter();
+        notifyChart();
+
+        return updated;
+    }
+
+    @Override
+    public int clearList() {
+        int delCount = dataAccess.clearLogs();
+        fragList.notifyAdapter();
+        notifyChart();
+
+        return delCount;
+    }
+
+    @Override
+    public int listSize() {return dataAccess.getLogSize();}
+
+    private void notifyChart() {
+        fragChart.updateAvg(dataAccess.formattedAvg());
+        fragChart.notifyChart();
+    }
 
     private void findViewsById() {
         toolbar = (Toolbar)findViewById(R.id.main_toolbar);

@@ -30,13 +30,9 @@ import util.Constant;
 /**
  * Created by zyuki on 1/12/2016.
  */
-public class DialogItemDelete extends DialogFragment implements View.OnClickListener {
-    private static final String ENTRY_ID_KEY = "item_id_key";
-//    private static final String LIST_POS_KEY = "list_pos";
-    private static final String RESET_COUNTER = "3";
-
+public class DialogItemDelete extends DialogFragment {
     private View customLayout;
-    private TextView alertTitle, counter;
+    private TextView counter;
     private Button delete;
 
     DataAccessObject dataAccess;
@@ -45,17 +41,7 @@ public class DialogItemDelete extends DialogFragment implements View.OnClickList
 
     private boolean timeReached = false;
 
-//    public static DialogItemDelete newInstance(int listPos, int entryID) {
-//        DialogItemDelete dialogFragment = new DialogItemDelete();
-//        Bundle args = new Bundle();
-//        args.putInt(ENTRY_ID_KEY, entryID);
-//        args.putInt(LIST_POS_KEY, listPos);
-//
-//        dialogFragment.setArguments(args);
-//        return dialogFragment;
-    public static DialogItemDelete newInstance() {
-        return new DialogItemDelete();
-    }
+    public static DialogItemDelete newInstance() {return new DialogItemDelete();}
 
     @Override
     public void onAttach(Activity activity) {
@@ -69,13 +55,17 @@ public class DialogItemDelete extends DialogFragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         customLayout = inflater.inflate(R.layout.dialog_delete_item, container, false);
 
-        alertTitle = (TextView)customLayout.findViewById(R.id.del_txt_delTitle);
         counter = (TextView)customLayout.findViewById(R.id.del_txt_counter);
 
         delete = (Button)customLayout.findViewById(R.id.del_btn_delete);
 
         Button dismiss = (Button)customLayout.findViewById(R.id.del_btn_dismiss);
-        dismiss.setOnClickListener(this);
+        dismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDialog().dismiss();
+            }
+        });
 
         dataAccess = ((ApplicationDatabase)getActivity().getApplication()).dataAccess;
 
@@ -87,31 +77,10 @@ public class DialogItemDelete extends DialogFragment implements View.OnClickList
         customLayout.setMinimumWidth(width);
 
         return delAllDialog();
-
-//        if(getArguments().getInt(ENTRY_ID_KEY) <= Constant.ALL_ID) {
-//            return delAllDialog();
-//        } else {
-//            return delOneDialog();
-//        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.del_btn_delete:
-                int count = dataAccess.deleteEntry(getArguments().getInt(ENTRY_ID_KEY));
-
-//                callback.removeLog(getArguments().getInt(LIST_POS_KEY));
-
-                showDeleteSnackbar(count);
-            case R.id.del_btn_dismiss:
-                getDialog().dismiss();
-                break;
-        }
     }
 
     private View delAllDialog() {
-        if(callback.listSize() == 0) {
+        if(callback.listSize() == Constant.EMPTY_INT) {
             delete.setEnabled(false);
             delete.setTextColor(ContextCompat.getColor(getContext(), R.color.text_color));
             delete.setAlpha(0.6f);
@@ -122,30 +91,16 @@ public class DialogItemDelete extends DialogFragment implements View.OnClickList
 
             delete.setOnTouchListener(new AsyncListener());
         }
-        //TODO animate the "Delete" button like the normal onClick button (for consistency)
+        //TODO: animate the "Delete" button like the normal onClick button (for consistency)
         delete.setText(getResources().getString(R.string.del_btn_all));
 
         return customLayout;
     }
 
-//    private View delOneDialog() {
-//        int id = getArguments().getInt(ENTRY_ID_KEY);
-//        int odomVal = dataAccess.getEntry(FillupTable.KEY_ID + " = " + id, null).getCurrentOdomVal();
-//        String title = getResources().getString(R.string.del_one_title_1_2) +
-//                " " + odomVal + " " +
-//                getResources().getString(R.string.del_one_title_2_2);
-//
-//        alertTitle.setText(title);
-//        delete.setOnClickListener(this);
-//
-//        return customLayout;
-//    }
-
     private void showDeleteSnackbar(int delCount) {
-        final int empty = 0;
         View root = getActivity().findViewById(R.id.main_root);
 
-        if(delCount != empty) {
+        if(delCount != Constant.EMPTY_INT) {
             String success = getResources().getString(R.string.del_snack_success_1_2) + " (" + delCount;
             success += (delCount == 1) ?
                     " " + getResources().getString(R.string.del_snack_entry_2_2) + ")" :
@@ -163,8 +118,7 @@ public class DialogItemDelete extends DialogFragment implements View.OnClickList
     /****/
     public interface Callback {
         int listSize();
-//        void removeLog(int listPos);
-        void clearList();
+        int clearList();
     }
 
     /****/
@@ -179,7 +133,6 @@ public class DialogItemDelete extends DialogFragment implements View.OnClickList
         public boolean onTouch(View v, MotionEvent event) {
             switch(event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    Log.d("event", "pressedDown & " + String.valueOf(timeReached));
                     listener = new AsyncPressTimer();
                     listener.execute(pressLen);
 
@@ -189,11 +142,9 @@ public class DialogItemDelete extends DialogFragment implements View.OnClickList
                     return true;
                 case MotionEvent.ACTION_UP:
                     if(timeReached) {
-                        int count = dataAccess.deleteAllEntries();
+                        int delCount = callback.clearList();
 
-                        callback.clearList();
-
-                        showDeleteSnackbar(count);
+                        showDeleteSnackbar(delCount);
                         getDialog().dismiss();
 
                         timerCancel();
@@ -207,7 +158,7 @@ public class DialogItemDelete extends DialogFragment implements View.OnClickList
         private void timerCancel() {
             if(listener != null) {
                 counter.setVisibility(View.INVISIBLE);
-                counter.setText(RESET_COUNTER);
+                counter.setText(Constant.TIMER_MAX);
                 countDown.cancel();
 
                 listener.pressTimer.cancel();
@@ -219,7 +170,7 @@ public class DialogItemDelete extends DialogFragment implements View.OnClickList
             final long buffer = 50L;
 
             return new CountDownTimer(millisInFuture + buffer, countDownInterval) {
-                private int ticker = (int)(long)pressLen / 1000;
+                private int ticker = Long.valueOf(pressLen / 1000).intValue();
 
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -228,9 +179,7 @@ public class DialogItemDelete extends DialogFragment implements View.OnClickList
                 }
 
                 @Override
-                public void onFinish() {
-                    counter.setText("OK");
-                }
+                public void onFinish() {counter.setText(getResources().getString(R.string.ok_text));}
             };
         }
     }
@@ -239,9 +188,7 @@ public class DialogItemDelete extends DialogFragment implements View.OnClickList
     private class AsyncPressTimer extends AsyncTask<Long, Void, Boolean> {
         private Timer pressTimer = new Timer();
 
-        private AsyncPressTimer() {
-            Log.d("event", "instantiated");
-        }
+        private AsyncPressTimer() {}
 
         @Override
         protected Boolean doInBackground(Long... params) {

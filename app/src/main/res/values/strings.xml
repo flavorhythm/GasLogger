@@ -38,4 +38,7 @@
     <string name="frag_list_title">List</string>
     <string name="avg_label">Average</string>
     <string name="mpg_label">MPG</string>
+    <string name="ok_text">OK</string>
+    <string name="prev_odom_conflict">Value conflicts with previous entry</string>
+    <string name="next_odom_conflict">Value conflicts with next entry</string>
 </resources>

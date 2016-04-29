@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by ZYuki on 1/11/2016.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-
     private static DatabaseHelper thisInstance;
 
     private static final String DATABASE_NAME = "fuel_db";
